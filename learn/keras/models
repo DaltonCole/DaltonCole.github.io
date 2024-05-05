@@ -1,0 +1,512 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171431390-1"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SPY7S5B91F"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-171431390-1');
+    </script>
+
+    <!-- Base File Includes -->
+    
+    
+
+    <!-- Includes -->
+    
+    <!-- Code highlighting
+        To Use: <pre><code class="language-python">print('Hello World')</code></pre>
+    -->
+    <link rel="stylesheet" href="/static/home/packages/highlightjs/dracula.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <!-- LaTeX input. Use \(...\) for inline mathematics and $$...$$ or \[...\] for block equations -->
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+	<script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+    <!-- Title -->
+    <title>
+            DRC
+        
+    - Learn Keras - Models
+
+    </title>
+    <!-- ### Bootstrap Files ### -->
+    <!-- Fit device screen size -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!-- ### END BOOTSTRAP FILES ### -->
+	
+	<!-- Font Awesome 4 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Load Custom Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="/static/home/bootstrap.css">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" href="/static/home/images/favicon.ico">
+
+    <!-- Hide/Reveal Navbar Upon Scrolling -->
+    <script src="/static/home/js/navbar_show.js" async></script>
+    <link rel="stylesheet" type="text/css" href="/static/home/css/navbar.css">
+
+    <!-- Javascript to run after the page has loaded -->
+    <script src="/static/home/js/on_page_load.js" defer></script>
+    
+</head>
+
+<!-- Body -->
+<body class='bg-light'>
+    <!-- Navigation Bar -->
+    <header class="nav-down">
+        <nav class="navbar py-0 navbar-expand-md navbar-dark bg-dark">
+    <!-- Website Brand Icon -->
+    <a class="navbar-brand" href="/">DRC</a>
+    <!-- Menu Button when screen is small -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navigation Buttons -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <!-- Home -->
+            <li class="nav-item dropdown">
+                <!-- Screen Reader -->
+                
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/">Home</a>
+                </div>
+            </li>
+            <!-- Experience -->
+            <li class="nav-item dropdown">
+                <!-- Screen Reader -->
+                
+                <!-- Experience Types -->
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/resume/">Experience</a>
+                    <button type="button" class="btn btn-dark px-1 dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu py-0 bg-secondary">
+                        <a class="dropdown-item" href="/resume/">&#8226; Resume</a>
+                        <a class="dropdown-item text-white" href="/work-experience/">&#8226; Work Experience</a>
+                        <!-- <a class="dropdown-item text-white" href="/computer-skills/">&#8226; Computer Skills</a> -->
+                    </div>
+                </div>
+            </li>
+ 
+            <!-- Blog Posts -->
+<!--            <li class="nav-item dropdown">
+                
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/blog/">Blog</a>
+                    <button type="button" class="btn btn-dark px-1 dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu py-0 bg-secondary">
+                        <a class="dropdown-item" href="/blog/project/">&#8226; Projects</a>
+                        <a class="dropdown-item" href="/blog/tutorial/">&#8226; Tutorials</a>
+                        <a class="dropdown-item" href="#">&#8226; Other</a>
+                    </div>
+                </div>
+            </li>
+-->        
+            <!-- Research -->
+            <li class="nav-item dropdown">
+                <!-- Screen Reader -->
+                
+                <!-- Experience Types -->
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/research/">Research</a>
+                    <button type="button" class="btn btn-dark px-1 dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu active py-0 bg-secondary">
+                        <a class="dropdown-item" href="/research/papers/">&#8226; Papers</a>
+                        <a class="dropdown-item" href="/research/projects/">&#8226; Projects</a>
+                        <a class="dropdown-item" href="/research/notes/">&#8226; Notes</a>
+                    </div>
+                </div>
+            </li>
+            <!-- Learn -->
+            <li class="nav-item dropdown">
+                
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/learn/">Learn</a>
+                </div>
+            </li>
+            <!-- Projects -->
+            <li class="nav-item dropdown">
+                
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/projects/">Projects</a>
+                </div>
+            </li>
+            <!-- Write-Ups -->
+            <li class="nav-item dropdown">
+                
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/writeups/kattis/">Write-Ups</a>
+                </div>
+            </li>
+            <!-- About -->
+            <li class="nav-item dropdown">
+                <!-- Screen Reader -->
+                
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/about/">About</a>
+                </div>
+            </li>
+            <!-- Contact -->
+            <li class="nav-item dropdown">
+                <!-- Screen Reader -->
+                
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/contact/">Contact</a>
+                </div>
+            </li>
+        </ul>
+        <!-- Search  bar -->
+        <form class="form-inline my-1" action="/search/">
+            <input class="form-control mr-0" style="font-size:14px; width:85%;" type="search" placeholder="Search" aria-label="Search" name="q" autocomplete="on">
+            <button type="submit" style="width:15%; background-color: Transparent; border-color: Transparent;">
+                <i class="fa fa-search" style="font-size:18px; color:#FFFFFF;"></i>
+            </button>
+        </form>
+    </div>
+</nav>
+
+    </header>
+
+    <!-- Content -->
+    <div style="margin-top:60px;">
+        <div class="container rounded m-4 mx-auto p-4 bg-white shadow-lg">
+            
+<div class="row">
+    <!-- Scroll Bar -->
+    <div class="d-none d-xl-block col-xl-2 overflow-auto" style="position:relative; overflow-y:scroll; height:80vh">
+        <div id="side-navbar" class="list-group flex-xl-column flex-row">
+            <center>
+                <a class="list-group-item list-group-item-action" href="#models">
+                    Models
+                </a>
+            </center>
+            
+                <a class="list-group-item list-group-item-action" href="#model">
+                    Model
+                </a>
+            
+                <a class="list-group-item list-group-item-action" href="#save-and-load">
+                    Save And Load
+                </a>
+            
+                <a class="list-group-item list-group-item-action" href="#sequential">
+                    Sequential
+                </a>
+            
+                <a class="list-group-item list-group-item-action" href="#summary">
+                    Summary
+                </a>
+            
+                <a class="list-group-item list-group-item-action" href="#training">
+                    Training
+                </a>
+            
+        </div>
+    </div>
+   <!-- Content -->
+   <div class="col" data-spy="scroll" data-target="#side-navbar" class="scrollspy" style="position:relative; overflow-y:scroll; height:80vh">
+       <!-- Subject Information -->
+       <div class="d-flex justify-content-between">
+           <a href="/learn/keras/"><button type="button" class="btn btn-light">Back</button></a>
+           <h1 id='models'>
+               Keras - Models
+           </h1>
+           <br/>
+       </div>
+        <p>A <a href="https://keras.io/api/models/model/" target="_blank">model</a> in keras is just a group of layers.</p>
+
+<p>A complete example that goes through creating, training, and evaluating a keras model:</p>
+
+<pre class="rounded"><code class="python">from sklearn.datasets import load_iris
+from sklearn.preprocessing import LabelBinarizer
+from sklearn.utils import shuffle
+import keras
+
+# Load dataset
+iris = load_iris()
+data = iris.data
+enc = LabelBinarizer()
+target = enc.fit_transform(iris.target)
+X, y = shuffle(data, target, random_state=0)
+
+# Make model
+inputs = keras.Input(shape=(4,))
+x = keras.layers.Dense(5, activation='relu')(inputs)
+outputs = keras.layers.Dense(3, activation='softmax')(x)
+model = keras.Model(inputs=inputs, outputs=outputs)
+
+# Compile model
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+# Train
+model.fit(x=X, y=y, batch_size=8, epochs=150, validation_split=0.3)
+
+# Evaluate
+loss, accuracy = model.evaluate(X, y)
+
+# Predict
+predictions = model.predict(X)  # softmax gives us a probability of each category
+</code></pre>
+
+        <!-- For each topic -->
+        
+            <!-- Topic header -->
+            <h2 id="model"><a href="/learn/keras/models/model">Model</a></h2>
+            <!-- Include topic -->
+            <p>The <code>Model</code> class requires two things, the <code>inputs</code> to a model and the <code>outputs</code> to a model. There is an optimal <code>name</code> parameter</p>
+
+<p>There are two ways to instantiate a <code>Model</code> class:</p>
+<ul>
+    <li>Functions API</li>
+    <li>By subclassing the <code>Model</code> class</li>
+</ul>
+
+<p>Function API method:</p>
+<pre class="rounded"><code class="python">import tensorflow as tf
+inputs = tf.keras.Input(shape=(3,))
+x = tf.keras.layers.Dense(4, activation=tf.nn.relu)(inputs)
+outputs = tf.keras.layers.Dense(5, activation=tf.nn.softmax)(x)
+model = tf.keras.Model(inputs=inputs, outputs=outputs)
+</code></pre>
+
+        
+            <!-- Topic header -->
+            <h2 id="save-and-load"><a href="/learn/keras/models/save-and-load">Save And Load</a></h2>
+            <!-- Include topic -->
+            <h6>Save tf.keras</h6>
+
+<p><a href="https://www.tensorflow.org/guide/keras/save_and_serialize" target="_blank">Saving</a> a model whole is super easy.</p>
+
+<pre class="rounded"><code class="python">model.save('my_model')</code></pre>
+
+<p>This will create a directory called <code>my_model</code> with <code>assets</code>, <code>saved_model.pb</code>, and <code>variables</code> as contents. This only works if using <code>tf.keras</code> instead of native keras. See below if using native keras.</p>
+
+<p>To load it again:</p>
+<pre class="rounded"><code class="python">model = tf.keras.models.load_model('my_model')</code></pre>
+
+<h6>Save keras</h6>
+<p><a href="https://keras.io/api/models/model_saving_apis/" target="_blank">Saving</a> the model as a single HDF5 is an option, however some items are not saved, such as custom layers and external losses and metrics. These can be quite annoying to add back later if you get a model from someone else.</p>
+
+<p>H5:</p>
+<pre class="rounded"><code class="python">model.save('model.h5')
+model = tf.keras.models.load_model('model.h5')</code></pre>
+
+<h6><a href="https://keras.io/api/models/model_saving_apis/" target="_blank">Other Save/Load Functions</a></h6>
+<ul>
+    <li><code>model.get_weights()</code></li>
+    <li><code>model.set_weights(weights)</code></li>
+    <li><code>model.save_weights('file_path.h5')</code></li>
+    <li><code>model.load_weights('file_path.h5')</code></li>
+    <li><code>model.to_json()</code></li>
+    <li><code>model = tf.keras.models.model_from_json(config)</code></li>
+    <li><code>new_model = tf.keras.models.clone_model(model)</code></li>
+</ul>
+
+        
+            <!-- Topic header -->
+            <h2 id="sequential"><a href="/learn/keras/models/sequential">Sequential</a></h2>
+            <!-- Include topic -->
+            <p>The <a href="https://keras.io/api/models/sequential/" target="_blank">Sequential</a> class allows you to add layers sequentially to a model.</p>
+
+<pre class="rounded"><code class="python">model = tf.keras.Sequential()
+model.add(tf.keras.Input(shape=(16,)))  # Add input layer that accepts a feature vector of length 16
+model.add(tf.keras.layers.Dense(6))  # Adds a layer containing 6 neurons</code></pre>
+
+        
+            <!-- Topic header -->
+            <h2 id="summary"><a href="/learn/keras/models/summary">Summary</a></h2>
+            <!-- Include topic -->
+            <p><code>Model.summary()</code> can be used to summarize your model, but outputting the layers</p>
+
+<pre class="rounded"><code>Layer (type)                 Output Shape              Param #
+=================================================================
+input_1 (InputLayer)         [(None, 3)]               0
+_________________________________________________________________
+dense (Dense)                (None, 4)                 16
+_________________________________________________________________
+dense_1 (Dense)              (None, 5)                 25
+=================================================================
+Total params: 41
+Trainable params: 41
+Non-trainable params: 0
+_________________________________________________________________
+</code></pre>
+
+        
+            <!-- Topic header -->
+            <h2 id="training"><a href="/learn/keras/models/training">Training</a></h2>
+            <!-- Include topic -->
+            <p>Keras <a href="https://keras.io/api/models/model_training_apis/" target="_blank">training</a> APIs involve compiling, fitting, evaluating, and predicting using a model.</p>
+
+<h6>Compile</h6>
+
+<p>Prepares the model for training (does a lot of hidden stuff).</p>
+
+<pre class="rounded"><code class="python">Model.compile(
+    optimizer="rmsprop",
+    loss=None,
+    metrics=None,
+    loss_weights=None,
+    weighted_metrics=None,
+    run_eagerly=None,
+    steps_per_execution=None,
+    **kwargs
+)</code></pre>
+
+<ul>
+    <li>Optimizer: <a href="https://www.tensorflow.org/api_docs/python/tf/keras/optimizers/Adam" target="_blank">Adam</a> is the most popular optimizer.</li>
+    <li>Loss: The neural network will try to minimize this value via the optimization algorithm. There are a large number of <a href="https://www.tensorflow.org/api_docs/python/tf/keras/losses" target="_blank">loss functions</a>. Most notably (note, for keras, you can use a string instead of the tensorflow functions by snake-casing the function as a string):</li>
+    <ul>
+        <li>Classification (Categorical) Data:</li>
+        <ul>
+            <li><a href="https://www.tensorflow.org/api_docs/python/tf/keras/losses/BinaryCrossentropy" target="_blank">BinaryCrossentropy</a>: Used when there are only two possible labels (0 and 1)</li>
+            <li><a href="https://www.tensorflow.org/api_docs/python/tf/keras/losses/CategoricalCrossentropy" target="_blank">CategoricalCrossentropy</a>: Used when there are two+ possible classes. Expects labels to be encoded via one-hot representation.</li>
+            <li><a href="https://www.tensorflow.org/api_docs/python/tf/keras/losses/SparseCategoricalCrossentropy" target="_blank">SparseCategoricalCrossentropy</a>: Sibling to CategoricalCrossentropy. Expects an integer encoding instead of one-hot. Integers are distinct classes, similarity via closeness is not assumed.</li>
+        </ul>
+        <li>Regression (Continuous) Data:</li>
+        <ul>
+            <li><a href="https://www.tensorflow.org/api_docs/python/tf/keras/losses/MeanSquaredError" target="_blank">MeanSquaredError</a>: Loss = square(y_true - y_pred)</li>
+        </ul>
+    </ul>
+    <li>Metrics: List of <a href="https://keras.io/api/metrics/" target="_blank">metrics</a> to output during training and returned during fitting. <code>['accuracy']</code> is the most common metric</li>
+    <li>Loss Weights: If a list of losses is given as the lost function, you can specify how heavily waited each loss function is. For example <code>[10, 1]</code> would weight the first loss function 10 times heavier than the second loss function.</li>
+</ul>
+
+<h6>Fit</h6>
+
+<p>Used to train a model.</p>
+
+<pre class="rounded"><code class="python">Model.fit(
+    x=None,
+    y=None,
+    batch_size=None,
+    epochs=1,
+    verbose=1,
+    callbacks=None,
+    validation_split=0.0,
+    validation_data=None,
+    shuffle=True,
+    class_weight=None,
+    sample_weight=None,
+    initial_epoch=0,
+    steps_per_epoch=None,
+    validation_steps=None,
+    validation_batch_size=None,
+    validation_freq=1,
+    max_queue_size=10,
+    workers=1,
+    use_multiprocessing=False,
+)</code></pre>
+
+<ul>
+    <li>Verbose: 0 = silent, 1 = progress bar per epoch, 2 = one line output per epoch</li>
+    <li>Callbacks: List of <a href="https://keras.io/api/callbacks/" target="_blank">callbacks</a>. My documentation on callbacks can be found <a href="/learn/keras/callbacks">here</a>.</li>
+    <li>Validation Split: Float between 0 and 1. Fraction of training data to use for validation. Uses the ending % BEFORE shuffling.</li>
+    <li>Validation Data: Data to use for validation. Data should be in <code>(x_val, y_val)</code> format. Do not use with <code>validation_split</code>.</li>
+    <li>Class Weight: Dictionary mapping class indices (integers) to weight (float). Useful for unbalanced data (where there are more samples of one class than another)</li>
+    <li>Sample Weight: Weigh samples differently. 1D numpy array of sample size is expected.</li>
+    <li>Validation Frequency: How often, in terms of epochs, to validate the data.</li>
+    <li>Generator Specific Arguments:</li>
+    <ul>
+        <li>Steps Per Epoch: Number of batches required to declare an epoch. Needed for generators. Same idea for validation_steps.</li>
+        <li>Max Queue Size: Number of samples to queue for a generator. Defaults to 10.</li>
+        <li>Workers: Number of workers used for generators. Defaults to 1.</li>
+        <li>Use Multiprocessing: Use process-based threading for generators.</li>
+    </ul>
+</ul>
+
+<p>Returns a <code>History</code> object that can be used for plotting.</p>
+
+<h6>Evaluate</h6>
+
+<p>Like fit, but without the training. Used to find the loss and metric values for the model.</p>
+
+<pre class="rounded"><code class="python">Model.evaluate(
+    x=None,
+    y=None,
+    batch_size=None,
+    verbose=1,
+    sample_weight=None,
+    steps=None,
+    callbacks=None,
+    max_queue_size=10,
+    workers=1,
+    use_multiprocessing=False,
+    return_dict=False,
+)</code></pre>
+
+<ul>
+    <li>Return Dict: Return the loss and metric results as a dictionary instead of a list. Key is the name of the metric. If False, a list (or single value) is returned.</li>
+</ul>
+
+<h6>Predict</h6>
+
+<p>Used to predict data. A batch is expected.</p>
+
+<pre class="rounded"><code class="python">Model.predict(
+    x,
+    batch_size=None,
+    verbose=0,
+    steps=None,
+    callbacks=None,
+    max_queue_size=10,
+    workers=1,
+    use_multiprocessing=False,
+)</code></pre>
+
+<p>Numpy array of predictions is returned</p>
+
+        
+    </div>
+</div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="small text-center text-muted">
+        <!-- Social Links -->
+		<p>
+            <a href="https://github.com/DaltonCole" target="_blank" class="fa fa-github" style="font-size:28px;color:black;"></a>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="https://www.linkedin.com/in/daltoncole1/" target="_blank" class="fa fa-linkedin" style="font-size:28px;color:#2867B2;"></a>
+        </p>
+
+        <!-- Copyright -->
+        
+        <p class="copyright"> Copyright &copy; 2020 
+            -2024 
+         | Dalton Russell Cole</p>
+
+        <!-- Extra Footer Block -->
+        
+        
+    </footer>
+</body>
+</html>
