@@ -1,0 +1,298 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171431390-1"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SPY7S5B91F"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-171431390-1');
+    </script>
+
+    <!-- Base File Includes -->
+    
+    
+
+    <!-- Includes -->
+    
+    <!-- Code highlighting
+        To Use: <pre><code class="language-python">print('Hello World')</code></pre>
+    -->
+    <link rel="stylesheet" href="/static/home/packages/highlightjs/dracula.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <!-- LaTeX input. Use \(...\) for inline mathematics and $$...$$ or \[...\] for block equations -->
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+	<script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+    <!-- Title -->
+    <title>
+            DRC
+        
+    - Learn Security Tools - Burp Suite
+
+    </title>
+    <!-- ### Bootstrap Files ### -->
+    <!-- Fit device screen size -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!-- ### END BOOTSTRAP FILES ### -->
+	
+	<!-- Font Awesome 4 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Load Custom Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="/static/home/bootstrap.css">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" href="/static/home/images/favicon.ico">
+
+    <!-- Hide/Reveal Navbar Upon Scrolling -->
+    <script src="/static/home/js/navbar_show.js" async></script>
+    <link rel="stylesheet" type="text/css" href="/static/home/css/navbar.css">
+
+    <!-- Javascript to run after the page has loaded -->
+    <script src="/static/home/js/on_page_load.js" defer></script>
+    
+</head>
+
+<!-- Body -->
+<body class='bg-light'>
+    <!-- Navigation Bar -->
+    <header class="nav-down">
+        <nav class="navbar py-0 navbar-expand-md navbar-dark bg-dark">
+    <!-- Website Brand Icon -->
+    <a class="navbar-brand" href="/">DRC</a>
+    <!-- Menu Button when screen is small -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navigation Buttons -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <!-- Home -->
+            <li class="nav-item dropdown">
+                <!-- Screen Reader -->
+                
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/">Home</a>
+                </div>
+            </li>
+            <!-- Experience -->
+            <li class="nav-item dropdown">
+                <!-- Screen Reader -->
+                
+                <!-- Experience Types -->
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/resume/">Experience</a>
+                    <button type="button" class="btn btn-dark px-1 dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu py-0 bg-secondary">
+                        <a class="dropdown-item" href="/resume/">&#8226; Resume</a>
+                        <a class="dropdown-item text-white" href="/work-experience/">&#8226; Work Experience</a>
+                        <!-- <a class="dropdown-item text-white" href="/computer-skills/">&#8226; Computer Skills</a> -->
+                    </div>
+                </div>
+            </li>
+ 
+            <!-- Blog Posts -->
+<!--            <li class="nav-item dropdown">
+                
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/blog/">Blog</a>
+                    <button type="button" class="btn btn-dark px-1 dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu py-0 bg-secondary">
+                        <a class="dropdown-item" href="/blog/project/">&#8226; Projects</a>
+                        <a class="dropdown-item" href="/blog/tutorial/">&#8226; Tutorials</a>
+                        <a class="dropdown-item" href="#">&#8226; Other</a>
+                    </div>
+                </div>
+            </li>
+-->        
+            <!-- Research -->
+            <li class="nav-item dropdown">
+                <!-- Screen Reader -->
+                
+                <!-- Experience Types -->
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/research/">Research</a>
+                    <button type="button" class="btn btn-dark px-1 dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu active py-0 bg-secondary">
+                        <a class="dropdown-item" href="/research/papers/">&#8226; Papers</a>
+                        <a class="dropdown-item" href="/research/projects/">&#8226; Projects</a>
+                        <a class="dropdown-item" href="/research/notes/">&#8226; Notes</a>
+                    </div>
+                </div>
+            </li>
+            <!-- Learn -->
+            <li class="nav-item dropdown">
+                
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/learn/">Learn</a>
+                </div>
+            </li>
+            <!-- Projects -->
+            <li class="nav-item dropdown">
+                
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/projects/">Projects</a>
+                </div>
+            </li>
+            <!-- Write-Ups -->
+            <li class="nav-item dropdown">
+                
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/writeups/kattis/">Write-Ups</a>
+                </div>
+            </li>
+            <!-- About -->
+            <li class="nav-item dropdown">
+                <!-- Screen Reader -->
+                
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/about/">About</a>
+                </div>
+            </li>
+            <!-- Contact -->
+            <li class="nav-item dropdown">
+                <!-- Screen Reader -->
+                
+                <div class="btn-group ">
+                    <a class="nav-link btn btn-dark pr-1" href="/contact/">Contact</a>
+                </div>
+            </li>
+        </ul>
+        <!-- Search  bar -->
+        <form class="form-inline my-1" action="/search/">
+            <input class="form-control mr-0" style="font-size:14px; width:85%;" type="search" placeholder="Search" aria-label="Search" name="q" autocomplete="on">
+            <button type="submit" style="width:15%; background-color: Transparent; border-color: Transparent;">
+                <i class="fa fa-search" style="font-size:18px; color:#FFFFFF;"></i>
+            </button>
+        </form>
+    </div>
+</nav>
+
+    </header>
+
+    <!-- Content -->
+    <div style="margin-top:60px;">
+        <div class="container rounded m-4 mx-auto p-4 bg-white shadow-lg">
+            
+<div class="row">
+    <!-- Scroll Bar -->
+    <div class="d-none d-xl-block col-xl-2 overflow-auto" style="position:relative; overflow-y:scroll; height:80vh">
+        <div id="side-navbar" class="list-group flex-xl-column flex-row">
+            <center>
+                <a class="list-group-item list-group-item-action" href="#burp-suite">
+                    Burp Suite
+                </a>
+            </center>
+            
+                <a class="list-group-item list-group-item-action" href="#intruder">
+                    Intruder
+                </a>
+            
+                <a class="list-group-item list-group-item-action" href="#proxy">
+                    Proxy
+                </a>
+            
+        </div>
+    </div>
+   <!-- Content -->
+   <div class="col" data-spy="scroll" data-target="#side-navbar" class="scrollspy" style="position:relative; overflow-y:scroll; height:80vh">
+       <!-- Subject Information -->
+       <div class="d-flex justify-content-between">
+           <a href="/learn/security-tools/"><button type="button" class="btn btn-light">Back</button></a>
+           <h1 id='burp-suite'>
+               Security Tools - Burp Suite
+           </h1>
+           <br/>
+       </div>
+        <p>Burp Suite is a framework of web application pentesting tools. See ZAP for a similar (completely free) tool).</p>
+
+<p>Burp Suite needs to be able to act as a proxy. Follow this tutorial by <a href="https://tryhackme.com/room/rpburpsuite" target="_blank">tryhackme</a> to set up FoxyProxy in firefox</p>
+
+<h6>Components</h6>
+<p>Burp suite has a number of different components:</p>
+<ul>
+    <li>Proxy: Funnel traffic through Burp</li>
+    <li>Target: Scope the project. Can be used to create a sitemp of the application we are testing.</li>
+    <li>Intruder: Powerful tool. Can be used for field fuzzing to credential stuffing</li>
+    <li>Repeater: "Repeat" requests. Often used with fuzzing.</li>
+    <li>Sequencer: Analyze the "randomness" present where random is intended</li>
+    <li>Decoder: Transforms data</li>
+    <li>Extender: Add extensions</li>
+    <li>Scanner (Premium Feature): Automated web vulnerability scanner</li>
+</ul>
+
+        <!-- For each topic -->
+        
+            <!-- Topic header -->
+            <h2 id="intruder"><a href="/learn/security-tools/burp-suite/intruder/">Intruder</a></h2>
+            <!-- Include topic -->
+            <h4>Positions</h4>
+<p>From the Positions tab, you may select different fields to attack.</p>
+
+<p>Attack type</p>
+<ul>
+    <li>Cluster Bomb: Brute force. Iterate through every combination of the payloads.</li>
+</ul>
+
+<h4>Payloads</h4>
+<p>Add payloads (dictionaries).</p>
+<p>To start the attack, press the attack button in the top right corner. :)</p>
+
+        
+            <!-- Topic header -->
+            <h2 id="proxy"><a href="/learn/security-tools/burp-suite/proxy/">Proxy</a></h2>
+            <!-- Include topic -->
+            <h4>Intercept</h4>
+<p>The intercept tab intercepts web traffic and allows you to view the request. You can send particular parts of this request to different modules, such as the Intruder module.</p>
+
+        
+    </div>
+</div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="small text-center text-muted">
+        <!-- Social Links -->
+		<p>
+            <a href="https://github.com/DaltonCole" target="_blank" class="fa fa-github" style="font-size:28px;color:black;"></a>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="https://www.linkedin.com/in/daltoncole1/" target="_blank" class="fa fa-linkedin" style="font-size:28px;color:#2867B2;"></a>
+        </p>
+
+        <!-- Copyright -->
+        
+        <p class="copyright"> Copyright &copy; 2020 
+            -2024 
+         | Dalton Russell Cole</p>
+
+        <!-- Extra Footer Block -->
+        
+        
+    </footer>
+</body>
+</html>
