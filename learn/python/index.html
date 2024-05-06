@@ -289,8 +289,8 @@
 
 <p>Basic syntax:</p>
 
-<pre class="rounded"><code class="python"># I always use argparse inside of a main block
-if __name__ == '__main__':
+<pre class="rounded"><code class="python"># It's good to use argparse inside of a function to not pollute the name space
+def main():
     import argparse
 
     # Create the parser and add a description
@@ -317,6 +317,8 @@ if __name__ == '__main__':
     print(f'lots_of_args: {args.lots_of_args}')
     print(f'save-dir: {args.save_dir}')
     print(f'flag: {args.flag}')
+if __name__ == '__main__':
+    main()
 </code></pre>
 
             <!-- For each topic -->
