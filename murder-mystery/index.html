@@ -93,6 +93,12 @@
       .panel { flex: 1; }
       .panel:first-child { max-width: 320px; }
     }
+
+    .cooldown {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
@@ -114,11 +120,12 @@
   <div class="panel">
     <h2>Interaction</h2>
     <select id="npcSelect"></select>
+    <div class="cooldown" id="cooldownDisplay">Select NPC to see cooldown</div>
 
     <h3>Action</h3>
-    <button onclick="interact('charm')">Charm</button>
-    <button onclick="interact('steal')">Steal</button>
-    <button onclick="interact('attack')">Attack</button>
+    <button id="charmBtn" onclick="interact('charm')">Charm</button>
+    <button id="stealBtn" onclick="interact('steal')">Steal</button>
+    <button id="attackBtn" onclick="interact('attack')">Attack</button>
 
     <h3>Attack Type</h3>
     <select id="attackType">
@@ -174,6 +181,10 @@ const npcSelect = document.getElementById('npcSelect');
 const statsDiv = document.getElementById('stats');
 const itemsDiv = document.getElementById('items');
 const logDiv = document.getElementById('log');
+const cooldownDisplay = document.getElementById('cooldownDisplay');
+const charmBtn = document.getElementById('charmBtn');
+const stealBtn = document.getElementById('stealBtn');
+const attackBtn = document.getElementById('attackBtn');
 
 Object.keys(characters).forEach(c => charSelect.add(new Option(c,c)));
 Object.keys(npcs).forEach(n => npcSelect.add(new Option(n,n)));
@@ -205,6 +216,7 @@ charSelect.onchange = () => {
   saveCharacterToCookie();
   renderStats();
   renderItems();
+  updateCooldownDisplay();
 };
 
 loadCharacterFromCookie();
@@ -243,6 +255,7 @@ function adjustStat(stat, delta) {
   currentCharacter[stat] = Math.max(0, currentCharacter[stat] + delta);
   saveCharacterToCookie();
   renderStats();
+  updateCooldownDisplay();
 }
 
 function getCooldownMs() {
@@ -278,6 +291,40 @@ function rollDiceFor(stats, stat) {
   return best + (stats[stat] || 0);
 }
 
+function log(msg) {
+  const div = document.createElement('div');
+  div.innerHTML = msg;
+  logDiv.prepend(div);
+}
+
+function updateCooldownDisplay() {
+  const npc = npcSelect.value;
+  if (npc === 'Another Player') {
+    cooldownDisplay.textContent = '';
+    enableButtons(true);
+    return;
+  }
+  const until = Number(getCookie(getNpcCooldownKey(npc))) || 0;
+  const remaining = until - Date.now();
+  if (remaining > 0) {
+    const sec = Math.ceil(remaining / 1000);
+    cooldownDisplay.textContent = `Cooldown: ${sec}s`;
+    enableButtons(false);
+  } else {
+    cooldownDisplay.textContent = 'Ready';
+    enableButtons(true);
+  }
+}
+
+function enableButtons(enabled) {
+  charmBtn.disabled = !enabled;
+  stealBtn.disabled = !enabled;
+  attackBtn.disabled = !enabled;
+}
+
+npcSelect.onchange = updateCooldownDisplay;
+setInterval(updateCooldownDisplay, 500);
+
 function interact(type) {
   const target = npcSelect.value;
 
@@ -305,18 +352,13 @@ function interact(type) {
   const success = playerRoll > npcRoll;
 
   setCooldown(target);
+  updateCooldownDisplay();
 
   const outcomeText = success
     ? `<span class="success">SUCCESS 🎉</span>`
     : `<span class="fail">FAIL ❌</span>`;
 
   log(`${type.toUpperCase()} vs ${target}: ${playerRoll} vs ${npcRoll} → ${outcomeText}`);
-}
-
-function log(msg) {
-  const div = document.createElement('div');
-  div.innerHTML = msg;
-  logDiv.prepend(div);
 }
 </script>
 
