@@ -2,67 +2,112 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Medieval Murder Mystery</title>
   <style>
+    :root {
+      --bg: #1f1b16;
+      --panel: #2b241c;
+      --panel-dark: #17130f;
+      --accent: #4b3e30;
+      --text: #f5e9d6;
+    }
+
+    * { box-sizing: border-box; }
+
     body {
-      font-family: system-ui, sans-serif;
-      background: #1f1b16;
-      color: #f5e9d6;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
       margin: 0;
-      padding: 0;
     }
-    h1, h2, h3 { margin: 0.5rem 0; }
+
+    h1 { font-size: 1.25rem; }
+    h2 { font-size: 1.1rem; }
+    h3 { font-size: 0.95rem; }
+
     .container {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 1rem;
-      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      padding: 0.75rem;
     }
+
     .panel {
-      background: #2b241c;
-      border-radius: 10px;
-      padding: 1rem;
+      background: var(--panel);
+      border-radius: 12px;
+      padding: 0.75rem;
       box-shadow: 0 0 10px rgba(0,0,0,0.4);
     }
+
     select, button {
       width: 100%;
-      padding: 0.5rem;
+      padding: 0.75rem;
       margin-top: 0.5rem;
-      background: #3a3026;
-      color: #f5e9d6;
+      background: var(--accent);
+      color: var(--text);
       border: none;
-      border-radius: 6px;
-      cursor: pointer;
+      border-radius: 10px;
+      font-size: 1rem;
+      touch-action: manipulation;
     }
-    button:hover { background: #4b3e30; }
+
+    button:active { transform: scale(0.98); }
+
     .stats {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.25rem 1rem;
+      grid-template-columns: 1fr auto;
+      row-gap: 0.25rem;
       font-size: 0.9rem;
     }
-    .log {
-      height: 250px;
-      overflow-y: auto;
-      background: #17130f;
-      padding: 0.5rem;
-      border-radius: 6px;
-      font-size: 0.85rem;
+
+    .items > div {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      margin-bottom: 0.25rem;
     }
+
+    .items button {
+      width: 42px;
+      padding: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    .log {
+      height: 200px;
+      overflow-y: auto;
+      background: var(--panel-dark);
+      padding: 0.5rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+    }
+
     .log div { margin-bottom: 0.25rem; }
+
+    .success { color: #4caf50; font-weight: 600; }
+    .fail { color: #e53935; font-weight: 600; }
+
+    @media (min-width: 768px) {
+      .container { flex-direction: row; align-items: flex-start; }
+      .panel { flex: 1; }
+      .panel:first-child { max-width: 320px; }
+    }
   </style>
 </head>
 <body>
 
-<h1 style="padding:1rem">🗡️ Medieval Murder Mystery</h1>
+<h1 style="padding:0.75rem">🗡️ Medieval Murder Mystery</h1>
 
 <div class="container">
   <div class="panel">
     <h2>Character</h2>
     <select id="characterSelect"></select>
+
     <h3>Stats</h3>
     <div class="stats" id="stats"></div>
-    <h3>Equipment</h3>
+
+    <h3>Adjust Stats</h3>
     <div class="items" id="items"></div>
   </div>
 
@@ -88,9 +133,6 @@
 </div>
 
 <script>
-/*********************
- * COOKIE UTILITIES  *
- *********************/
 function setCookie(name, value, days = 7) {
   const expires = new Date(Date.now() + days*864e5).toUTCString();
   document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
@@ -103,9 +145,6 @@ function getCookie(name) {
   }, null);
 }
 
-/*********************
- * DATA DEFINITIONS *
- *********************/
 const npcs = {
   Queen:{ cha:6, int:5, dex:3, str:2 },
   Prince:{ cha:4, str:4, dex:3, int:2 },
@@ -121,10 +160,10 @@ const npcs = {
 };
 
 const characters = {
-  Rogue: { str:2, dex:5, con:3, int:2, luck:3, cha:3 },
-  Knight:{ str:5, dex:2, con:4, int:1, luck:2, cha:2 },
-  Mage:  { str:1, dex:2, con:2, int:5, luck:3, cha:3 },
-  Bard:  { str:2, dex:3, con:3, int:3, luck:2, cha:5 }
+  Rogue: { str:2, dex:5, con:3, int:2, luck:3, cha:3, constitution:2 },
+  Knight:{ str:5, dex:2, con:4, int:1, luck:2, cha:2, constitution:3 },
+  Mage:  { str:1, dex:2, con:2, int:5, luck:3, cha:3, constitution:1 },
+  Bard:  { str:2, dex:3, con:3, int:3, luck:2, cha:5, constitution:2 }
 };
 
 let currentCharacter = null;
@@ -138,10 +177,8 @@ const logDiv = document.getElementById('log');
 
 Object.keys(characters).forEach(c => charSelect.add(new Option(c,c)));
 Object.keys(npcs).forEach(n => npcSelect.add(new Option(n,n)));
+npcSelect.add(new Option('Another Player','Another Player'));
 
-/*********************
- * LOAD FROM COOKIE *
- *********************/
 function loadCharacterFromCookie() {
   const savedName = getCookie('mm_character_name');
   const savedStats = getCookie('mm_character_stats');
@@ -150,7 +187,7 @@ function loadCharacterFromCookie() {
     currentCharacterName = savedName;
     currentCharacter = JSON.parse(savedStats);
     charSelect.value = savedName;
-    log('Loaded character from cookie');
+    log('Loaded saved character');
   } else {
     currentCharacterName = charSelect.value;
     currentCharacter = JSON.parse(JSON.stringify(characters[currentCharacterName]));
@@ -174,9 +211,6 @@ loadCharacterFromCookie();
 renderStats();
 renderItems();
 
-/*********************
- * RENDERING LOGIC  *
- *********************/
 function renderStats() {
   statsDiv.innerHTML = '';
   Object.entries(currentCharacter).forEach(([k,v]) => {
@@ -188,9 +222,6 @@ function renderItems() {
   itemsDiv.innerHTML = '';
   Object.keys(currentCharacter).forEach(stat => {
     const row = document.createElement('div');
-    row.style.display = 'flex';
-    row.style.gap = '0.25rem';
-
     const label = document.createElement('span');
     label.textContent = stat.toUpperCase();
     label.style.flex = '1';
@@ -211,27 +242,51 @@ function renderItems() {
 function adjustStat(stat, delta) {
   currentCharacter[stat] = Math.max(0, currentCharacter[stat] + delta);
   saveCharacterToCookie();
-  log(`Adjusted ${stat.toUpperCase()} by ${delta}`);
   renderStats();
 }
 
-/*********************
- * GAME LOGIC       *
- *********************/
+function getCooldownMs() {
+  const base = 3 * 60 * 1000;
+  const reduction = (currentCharacter.constitution || 0) * 15000;
+  return Math.max(0, base - reduction);
+}
+
+function getNpcCooldownKey(npc) {
+  return `mm_cd_${currentCharacterName}_${npc}`;
+}
+
+function isOnCooldown(npc) {
+  const until = Number(getCookie(getNpcCooldownKey(npc)));
+  return until && Date.now() < until;
+}
+
+function setCooldown(npc) {
+  const until = Date.now() + getCooldownMs();
+  setCookie(getNpcCooldownKey(npc), until);
+}
+
 function rollDice(stat) {
-  const rolls = 1 + Math.floor(currentCharacter.luck / 3);
+  return rollDiceFor(currentCharacter, stat);
+}
+
+function rollDiceFor(stats, stat) {
+  const rolls = 1 + Math.floor((stats.luck || 0) / 3);
   let best = 0;
   for (let i = 0; i < rolls; i++) {
     best = Math.max(best, Math.floor(Math.random() * 20) + 1);
   }
-  return best + currentCharacter[stat];
+  return best + (stats[stat] || 0);
 }
 
 function interact(type) {
-  const npcName = npcSelect.value;
-  const npc = npcs[npcName];
-  let statUsed = 'cha';
+  const target = npcSelect.value;
 
+  if (target !== 'Another Player' && isOnCooldown(target)) {
+    log(`<span class="fail">${target} is on cooldown ⏳</span>`);
+    return;
+  }
+
+  let statUsed = 'cha';
   if (type === 'steal') statUsed = 'dex';
   if (type === 'attack') {
     const atk = document.getElementById('attackType').value;
@@ -239,15 +294,28 @@ function interact(type) {
   }
 
   const playerRoll = rollDice(statUsed);
+
+  if (target === 'Another Player') {
+    log(`PVP ${type.toUpperCase()}: Roll = ${playerRoll} 🎲`);
+    return;
+  }
+
+  const npc = npcs[target];
   const npcRoll = Math.floor(Math.random() * 20) + 1 + (npc[statUsed] || 0);
   const success = playerRoll > npcRoll;
 
-  log(`${type.toUpperCase()} vs ${npcName}: You ${playerRoll} vs NPC ${npcRoll} → ${success ? 'SUCCESS' : 'FAIL'}`);
+  setCooldown(target);
+
+  const outcomeText = success
+    ? `<span class="success">SUCCESS 🎉</span>`
+    : `<span class="fail">FAIL ❌</span>`;
+
+  log(`${type.toUpperCase()} vs ${target}: ${playerRoll} vs ${npcRoll} → ${outcomeText}`);
 }
 
 function log(msg) {
   const div = document.createElement('div');
-  div.textContent = msg;
+  div.innerHTML = msg;
   logDiv.prepend(div);
 }
 </script>
