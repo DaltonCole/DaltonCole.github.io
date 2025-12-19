@@ -124,8 +124,40 @@ const statTooltipText = Object.entries(statDescriptions).map(([k,v]) => `${k.toU
 
 function setCookie(name,value,days=7){const expires=new Date(Date.now()+days*864e5).toUTCString();document.cookie=`${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`}
 function getCookie(name){return document.cookie.split('; ').reduce((r,v)=>{const parts=v.split('=');return parts[0]===name?decodeURIComponent(parts[1]):r},null)}
-const npcs={Queen:{cha:6,int:5,dex:3,str:2},Prince:{cha:4,str:4,dex:3,int:2},Princess:{cha:5,int:4,dex:3,str:1},'Royal Dog':{cha:1,dex:5,str:3},'Shop Keeper':{cha:3,int:4,dex:3},'Fortune Teller':{cha:4,int:5,dex:2},'Guard 1':{str:4,dex:3,cha:2},'Guard 2':{str:4,dex:2,cha:2},'Town Folk 1':{cha:3,dex:2},'Town Folk 2':{cha:2,dex:3},'Town Beggar':{cha:4,dex:3}};
-const characters={Rogue:{str:2,dex:5,con:3,int:2,luck:3,cha:3},Knight:{str:5,dex:2,con:4,int:1,luck:2,cha:2},Mage:{str:1,dex:2,con:2,int:5,luck:3,cha:3},Bard:{str:2,dex:3,con:3,int:3,luck:2,cha:5}};
+const npcs={
+  "Crow":{str:0,dex:5,con:0,int:7,luck:9,cha:0},
+  "First Princess":{str:2,dex:4,con:0,int:5,luck:3,cha:7},
+  "Fortune Teller":{str:0,dex:0,con:0,int:0,luck:6,cha:3},
+  "Guard 1":{str:5,dex:3,con:0,int:3,luck:0,cha:0},
+  "Guard 2":{str:2,dex:2,con:0,int:2,luck:0,cha:2},
+  "Jester":{str:0,dex:0,con:0,int:6,luck:3,cha:5},
+  "Queen":{str:7,dex:7,con:0,int:7,luck:0,cha:7},
+  "Royal Dog":{str:3,dex:2,con:0,int:3,luck:3,cha:3},
+  "Second Princess":{str:3,dex:4,con:0,int:4,luck:3,cha:4},
+  "Street Cat":{str:1,dex:5,con:0,int:5,luck:7,cha:3},
+  "Town Begger - Sir Saint Duggery":{str:4,dex:4,con:0,int:4,luck:0,cha:0},
+  "Town Folk 1 - Jack":{str:1,dex:1,con:0,int:1,luck:0,cha:1},
+  "Town Folk 2 - Jill":{str:0,dex:1,con:0,int:0,luck:0,cha:3},
+  "Town Folk 3 - James":{str:2,dex:1,con:0,int:0,luck:9,cha:1},
+};
+const characters={
+  "Bella - Bobert Bouzqueeffious":{str:0,dex:0,con:0,int:3,luck:0,cha:2},
+  "Caleb - Aonn Rivers":{str:0,dex:0,con:0,int:3,luck:2,cha:0},
+  "Cindy - Noctyra Hexwrn":{str:0,dex:0,con:0,int:2,luck:0,cha:3},
+  "Dylan - Merlin":{str:0,dex:0,con:0,int:5,luck:0,cha:0},
+  "Hannah - Dewalt The Dragon":{str:3,dex:1,con:0,int:1,luck:0,cha:0},
+  "Kenzie - Ingrid Stormcloak":{str:1,dex:4,con:0,int:0,luck:0,cha:0},
+  "Leti - Mistress Belladonna":{str:0,dex:0,con:0,int:1,luck:0,cha:4},
+  "Lorél - Chromie":{str:3,dex:0,con:0,int:1,luck:0,cha:1},
+  "Madeline - Algea":{str:0,dex:0,con:2,int:0,luck:3,cha:0},
+  "Madi - Trinket Brassfield":{str:0,dex:3,con:0,int:3,luck:0,cha:-1},
+  "Philip - Holark":{str:4,dex:0,con:2,int:2,luck:0,cha:-3},
+  "Robert - Rian Josling":{str:0,dex:2,con:1,int:1,luck:3,cha:-2},
+  "Rose - Aster Rhys":{str:0,dex:0,con:1,int:3,luck:2,cha:-1},
+  "Stephen - Merrick":{str:2,dex:0,con:0,int:0,luck:0,cha:3},
+  "Tristan - Bongo":{str:0,dex:2,con:1,int:0,luck:0,cha:2},
+  "Tyler - Aldrich Blackthorn":{str:2,dex:0,con:1,int:2,luck:0,cha:0},
+};
 
 let currentCharacter=null;let currentCharacterName=null;
 const charSelect=document.getElementById('characterSelect');
@@ -154,8 +186,7 @@ function adjustStat(stat,delta){currentCharacter[stat]+=delta;saveCharacterToCoo
 function getCooldownMs(){return Math.max(0,3*60*1000-(currentCharacter.con||0)*15000)}
 function getNpcCooldownKey(npc){return`mm_cd_${currentCharacterName}_${npc}`}function isOnCooldown(npc){const until=Number(getCookie(getNpcCooldownKey(npc)));return until&&Date.now()<until}
 function setCooldown(npc){setCookie(getNpcCooldownKey(npc),Date.now()+getCooldownMs())}
-function rollDice(stat){return rollDiceFor(currentCharacter,stat)}
-function rollDiceFor(stats,stat){const rolls=1+Math.floor((stats.luck||0)/3);let best=0;for(let i=0;i<rolls;i++){best=Math.max(best,Math.floor(Math.random()*20)+1)}return best+(stats[stat]||0)}
+function rollDice(stat,statsObj=null){statsObj=statsObj||currentCharacter;const rolls=1+Math.floor((statsObj.luck||0)/3);let best=0;for(let i=0;i<rolls;i++){best=Math.max(best,Math.floor(Math.random()*20)+1)}return best+(statsObj[stat]||0)}
 function log(msg){const div=document.createElement('div');div.innerHTML=msg;logDiv.prepend(div)}
 function updateCooldownDisplay(){const npc=npcSelect.value;if(npc==='Another Player'){cooldownDisplay.textContent='';enableButtons(true);return}const until=Number(getCookie(getNpcCooldownKey(npc)))||0;const remaining=until-Date.now();if(remaining>0){const sec=Math.ceil(remaining/1000);cooldownDisplay.textContent=`Cooldown: ${sec}s`;enableButtons(false)}else{cooldownDisplay.textContent='Ready';enableButtons(true)}}
 function enableButtons(enabled){charmBtn.disabled=!enabled;stealBtn.disabled=!enabled;attackBtn.disabled=!enabled}
@@ -173,7 +204,6 @@ function interact(type){
   }
 
   const playerRoll=rollDice(statUsed);
-
   const atkType = type==='attack'?document.getElementById('attackType').value.toUpperCase():type.toUpperCase();
 
   if(target==='Another Player'){
@@ -182,7 +212,7 @@ function interact(type){
   }
 
   const npc=npcs[target];
-  const npcRoll=Math.floor(Math.random()*20)+1+(npc[statUsed]||0);
+  const npcRoll=rollDice(statUsed,npc);
   const success=playerRoll>npcRoll;
 
   setCooldown(target);
@@ -194,4 +224,5 @@ function interact(type){
 </script>
 </body>
 </html>
+
 
