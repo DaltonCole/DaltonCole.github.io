@@ -11,12 +11,10 @@
       margin: 0;
       padding: 0;
     }
-    h1, h2, h3 {
-      margin: 0.5rem 0;
-    }
+    h1, h2, h3 { margin: 0.5rem 0; }
     .container {
       display: grid;
-      grid-template-columns: 280px 1fr; /* NPC column removed */
+      grid-template-columns: 280px 1fr;
       gap: 1rem;
       padding: 1rem;
     }
@@ -36,9 +34,7 @@
       border-radius: 6px;
       cursor: pointer;
     }
-    button:hover {
-      background: #4b3e30;
-    }
+    button:hover { background: #4b3e30; }
     .stats {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -53,9 +49,7 @@
       border-radius: 6px;
       font-size: 0.85rem;
     }
-    .log div {
-      margin-bottom: 0.25rem;
-    }
+    .log div { margin-bottom: 0.25rem; }
   </style>
 </head>
 <body>
@@ -63,7 +57,6 @@
 <h1 style="padding:1rem">🗡️ Medieval Murder Mystery</h1>
 
 <div class="container">
-  <!-- Character Panel -->
   <div class="panel">
     <h2>Character</h2>
     <select id="characterSelect"></select>
@@ -73,7 +66,6 @@
     <div class="items" id="items"></div>
   </div>
 
-  <!-- Interaction Panel -->
   <div class="panel">
     <h2>Interaction</h2>
     <select id="npcSelect"></select>
@@ -96,6 +88,24 @@
 </div>
 
 <script>
+/*********************
+ * COOKIE UTILITIES  *
+ *********************/
+function setCookie(name, value, days = 7) {
+  const expires = new Date(Date.now() + days*864e5).toUTCString();
+  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
+}
+
+function getCookie(name) {
+  return document.cookie.split('; ').reduce((r, v) => {
+    const parts = v.split('=');
+    return parts[0] === name ? decodeURIComponent(parts[1]) : r;
+  }, null);
+}
+
+/*********************
+ * DATA DEFINITIONS *
+ *********************/
 const npcs = {
   Queen:{ cha:6, int:5, dex:3, str:2 },
   Prince:{ cha:4, str:4, dex:3, int:2 },
@@ -118,6 +128,7 @@ const characters = {
 };
 
 let currentCharacter = null;
+let currentCharacterName = null;
 
 const charSelect = document.getElementById('characterSelect');
 const npcSelect = document.getElementById('npcSelect');
@@ -128,15 +139,44 @@ const logDiv = document.getElementById('log');
 Object.keys(characters).forEach(c => charSelect.add(new Option(c,c)));
 Object.keys(npcs).forEach(n => npcSelect.add(new Option(n,n)));
 
+/*********************
+ * LOAD FROM COOKIE *
+ *********************/
+function loadCharacterFromCookie() {
+  const savedName = getCookie('mm_character_name');
+  const savedStats = getCookie('mm_character_stats');
+
+  if (savedName && savedStats && characters[savedName]) {
+    currentCharacterName = savedName;
+    currentCharacter = JSON.parse(savedStats);
+    charSelect.value = savedName;
+    log('Loaded character from cookie');
+  } else {
+    currentCharacterName = charSelect.value;
+    currentCharacter = JSON.parse(JSON.stringify(characters[currentCharacterName]));
+  }
+}
+
+function saveCharacterToCookie() {
+  setCookie('mm_character_name', currentCharacterName);
+  setCookie('mm_character_stats', JSON.stringify(currentCharacter));
+}
+
 charSelect.onchange = () => {
-  currentCharacter = JSON.parse(JSON.stringify(characters[charSelect.value]));
+  currentCharacterName = charSelect.value;
+  currentCharacter = JSON.parse(JSON.stringify(characters[currentCharacterName]));
+  saveCharacterToCookie();
   renderStats();
   renderItems();
 };
 
-charSelect.selectedIndex = 0;
-charSelect.onchange();
+loadCharacterFromCookie();
+renderStats();
+renderItems();
 
+/*********************
+ * RENDERING LOGIC  *
+ *********************/
 function renderStats() {
   statsDiv.innerHTML = '';
   Object.entries(currentCharacter).forEach(([k,v]) => {
@@ -170,10 +210,14 @@ function renderItems() {
 
 function adjustStat(stat, delta) {
   currentCharacter[stat] = Math.max(0, currentCharacter[stat] + delta);
+  saveCharacterToCookie();
   log(`Adjusted ${stat.toUpperCase()} by ${delta}`);
   renderStats();
 }
 
+/*********************
+ * GAME LOGIC       *
+ *********************/
 function rollDice(stat) {
   const rolls = 1 + Math.floor(currentCharacter.luck / 3);
   let best = 0;
@@ -210,5 +254,4 @@ function log(msg) {
 
 </body>
 </html>
-
 
