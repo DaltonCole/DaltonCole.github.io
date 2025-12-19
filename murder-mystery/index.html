@@ -183,7 +183,7 @@ function renderStats(){
   statsDiv.innerHTML='';
   Object.keys(currentCharacter).forEach(stat=>{
     const base = characters[currentCharacterName][stat] || 0;
-    const bonus = currentCharacter[stat] - base;
+    const bonus = currentCharacter[stat] - base; // Allow negative values
     const row = document.createElement('div');
     row.innerHTML = `<div>${stat.toUpperCase()}</div><div>${base}${bonus!==0 ? (bonus>0 ? ' + '+bonus : ' - '+Math.abs(bonus)) : ''}</div>`;
     statsDiv.appendChild(row);
@@ -205,7 +205,7 @@ function renderItems(){
 }
 
 function adjustStat(stat,delta){
-  currentCharacter[stat] = Math.max(0,currentCharacter[stat]+delta);
+  currentCharacter[stat] = currentCharacter[stat]+delta;
   saveCharacterToCookie();
   renderStats();
   updateCooldownDisplay();
