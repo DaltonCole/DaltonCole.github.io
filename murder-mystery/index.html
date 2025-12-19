@@ -58,11 +58,7 @@ button:active { transform: scale(0.98); }
   gap: 0.25rem;
   margin-bottom: 0.25rem;
 }
-.items button {
-  width: 42px;
-  padding: 0.5rem;
-  font-size: 1.1rem;
-}
+.items button { width: 42px; padding: 0.5rem; font-size: 1.1rem; }
 .log {
   height: 200px;
   overflow-y: auto;
@@ -74,27 +70,19 @@ button:active { transform: scale(0.98); }
 .log div { margin-bottom: 0.25rem; }
 .success { color: #4caf50; font-weight: 600; }
 .fail { color: #e53935; font-weight: 600; }
-@media (min-width: 768px) {
-  .container { flex-direction: row; align-items: flex-start; }
-  .panel { flex: 1; }
-  .panel:first-child { max-width: 320px; }
-}
-.cooldown {
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-}
+@media (min-width: 768px) { .container { flex-direction: row; align-items: flex-start; } .panel { flex: 1; } .panel:first-child { max-width: 320px; } }
+.cooldown { margin-top: 0.5rem; font-size: 0.9rem; font-weight: 600; }
+.tooltip-btn { background: var(--accent); border-radius: 50%; width: 22px; height: 22px; font-size: 14px; padding:0; line-height:22px; text-align:center; margin-left:5px; }
 </style>
 </head>
 <body>
-
 <h1 style="padding:0.75rem">🗡️ Medieval Murder Mystery</h1>
 <div class="container">
   <div class="panel">
     <h2>Character</h2>
     <select id="characterSelect"></select>
 
-    <h3>Stats</h3>
+    <h3>Stats <button class="tooltip-btn" onclick="alert(statTooltipText)">?</button></h3>
     <div class="stats" id="stats"></div>
 
     <h3>Adjust Stats</h3>
@@ -124,114 +112,85 @@ button:active { transform: scale(0.98); }
 </div>
 
 <script>
-function setCookie(name, value, days = 7) {
-  const expires = new Date(Date.now() + days*864e5).toUTCString();
-  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
-}
-function getCookie(name) {
-  return document.cookie.split('; ').reduce((r, v) => {
-    const parts = v.split('=');
-    return parts[0] === name ? decodeURIComponent(parts[1]) : r;
-  }, null);
-}
+const statDescriptions = {
+  str: 'Strength: Determines melee attack power',
+  dex: 'Dexterity: Determines ranged attack power and ability to steal',
+  con: 'Constitution: Decreases cooldown period',
+  int: 'Intelligence: Determines magic attack power',
+  luck: 'Luck: Allows rolling multiple dice',
+  cha: 'Charisma: Determines ability to charm NPCs'
+};
+const statTooltipText = Object.entries(statDescriptions).map(([k,v]) => `${k.toUpperCase()}: ${v}`).join('\n');
 
-const npcs = { Queen:{ cha:6, int:5, dex:3, str:2 }, Prince:{ cha:4, str:4, dex:3, int:2 }, Princess:{ cha:5, int:4, dex:3, str:1 }, 'Royal Dog':{ cha:1, dex:5, str:3 }, 'Shop Keeper':{ cha:3, int:4, dex:3 }, 'Fortune Teller':{ cha:4, int:5, dex:2 }, 'Guard 1':{ str:4, dex:3, cha:2 }, 'Guard 2':{ str:4, dex:2, cha:2 }, 'Town Folk 1':{ cha:3, dex:2 }, 'Town Folk 2':{ cha:2, dex:3 }, 'Town Beggar':{ cha:4, dex:3 } };
+function setCookie(name,value,days=7){const expires=new Date(Date.now()+days*864e5).toUTCString();document.cookie=`${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`}
+function getCookie(name){return document.cookie.split('; ').reduce((r,v)=>{const parts=v.split('=');return parts[0]===name?decodeURIComponent(parts[1]):r},null)}
+const npcs={Queen:{cha:6,int:5,dex:3,str:2},Prince:{cha:4,str:4,dex:3,int:2},Princess:{cha:5,int:4,dex:3,str:1},'Royal Dog':{cha:1,dex:5,str:3},'Shop Keeper':{cha:3,int:4,dex:3},'Fortune Teller':{cha:4,int:5,dex:2},'Guard 1':{str:4,dex:3,cha:2},'Guard 2':{str:4,dex:2,cha:2},'Town Folk 1':{cha:3,dex:2},'Town Folk 2':{cha:2,dex:3},'Town Beggar':{cha:4,dex:3}};
+const characters={Rogue:{str:2,dex:5,con:3,int:2,luck:3,cha:3},Knight:{str:5,dex:2,con:4,int:1,luck:2,cha:2},Mage:{str:1,dex:2,con:2,int:5,luck:3,cha:3},Bard:{str:2,dex:3,con:3,int:3,luck:2,cha:5}};
 
-// Combine con and constitution
-const characters = { Rogue: { str:2, dex:5, con:3, int:2, luck:3, cha:3 }, Knight:{ str:5, dex:2, con:4, int:1, luck:2, cha:2 }, Mage:{ str:1, dex:2, con:2, int:5, luck:3, cha:3 }, Bard:{ str:2, dex:3, con:3, int:3, luck:2, cha:5 } };
-
-let currentCharacter = null;
-let currentCharacterName = null;
-const charSelect = document.getElementById('characterSelect');
-const npcSelect = document.getElementById('npcSelect');
-const statsDiv = document.getElementById('stats');
-const itemsDiv = document.getElementById('items');
-const logDiv = document.getElementById('log');
-const cooldownDisplay = document.getElementById('cooldownDisplay');
-const charmBtn = document.getElementById('charmBtn');
-const stealBtn = document.getElementById('stealBtn');
-const attackBtn = document.getElementById('attackBtn');
-
-Object.keys(characters).forEach(c => charSelect.add(new Option(c,c)));
-Object.keys(npcs).forEach(n => npcSelect.add(new Option(n,n)));
+let currentCharacter=null;let currentCharacterName=null;
+const charSelect=document.getElementById('characterSelect');
+const npcSelect=document.getElementById('npcSelect');
+const statsDiv=document.getElementById('stats');
+const itemsDiv=document.getElementById('items');
+const logDiv=document.getElementById('log');
+const cooldownDisplay=document.getElementById('cooldownDisplay');
+const charmBtn=document.getElementById('charmBtn');
+const stealBtn=document.getElementById('stealBtn');
+const attackBtn=document.getElementById('attackBtn');
+Object.keys(characters).forEach(c=>charSelect.add(new Option(c,c)));
+Object.keys(npcs).forEach(n=>npcSelect.add(new Option(n,n)));
 npcSelect.add(new Option('Another Player','Another Player'));
 
-function loadCharacterFromCookie() {
-  const savedName = getCookie('mm_character_name');
-  const savedStats = getCookie('mm_character_stats');
-  if(savedName && savedStats && characters[savedName]){
-    currentCharacterName = savedName;
-    currentCharacter = JSON.parse(savedStats);
-    charSelect.value = savedName;
-    log('Loaded saved character');
-  } else {
-    currentCharacterName = charSelect.value;
-    currentCharacter = JSON.parse(JSON.stringify(characters[currentCharacterName]));
+function loadCharacterFromCookie(){const savedName=getCookie('mm_character_name');const savedStats=getCookie('mm_character_stats');if(savedName&&savedStats&&characters[savedName]){currentCharacterName=savedName;currentCharacter=JSON.parse(savedStats);charSelect.value=savedName;log('Loaded saved character')}else{currentCharacterName=charSelect.value;currentCharacter=JSON.parse(JSON.stringify(characters[currentCharacterName]))}}
+function saveCharacterToCookie(){setCookie('mm_character_name',currentCharacterName);setCookie('mm_character_stats',JSON.stringify(currentCharacter))}
+charSelect.onchange=()=>{currentCharacterName=charSelect.value;currentCharacter=JSON.parse(JSON.stringify(characters[currentCharacterName]));saveCharacterToCookie();renderStats();renderItems();updateCooldownDisplay()};
+loadCharacterFromCookie();renderStats();renderItems();
+
+function renderStats(){statsDiv.innerHTML='';Object.keys(currentCharacter).forEach(stat=>{const base=characters[currentCharacterName][stat]||0;const bonus=currentCharacter[stat]-base;const row=document.createElement('div');row.innerHTML=`<div>${stat.toUpperCase()}</div><div>${base}${bonus!==0?(bonus>0?' + '+bonus:' - '+Math.abs(bonus)):''}</div>`;statsDiv.appendChild(row)})}
+
+function renderItems(){itemsDiv.innerHTML='';Object.keys(currentCharacter).forEach(stat=>{const row=document.createElement('div');const label=document.createElement('span');label.textContent=stat.toUpperCase();label.style.flex='1';const minus=document.createElement('button');minus.textContent='−';minus.onclick=()=>adjustStat(stat,-1);const plus=document.createElement('button');plus.textContent='+';plus.onclick=()=>adjustStat(stat,1);row.append(label,minus,plus);itemsDiv.appendChild(row)})}
+
+function adjustStat(stat,delta){currentCharacter[stat]+=delta;saveCharacterToCookie();renderStats();updateCooldownDisplay()}
+function getCooldownMs(){return Math.max(0,3*60*1000-(currentCharacter.con||0)*15000)}
+function getNpcCooldownKey(npc){return`mm_cd_${currentCharacterName}_${npc}`}function isOnCooldown(npc){const until=Number(getCookie(getNpcCooldownKey(npc)));return until&&Date.now()<until}
+function setCooldown(npc){setCookie(getNpcCooldownKey(npc),Date.now()+getCooldownMs())}
+function rollDice(stat){return rollDiceFor(currentCharacter,stat)}
+function rollDiceFor(stats,stat){const rolls=1+Math.floor((stats.luck||0)/3);let best=0;for(let i=0;i<rolls;i++){best=Math.max(best,Math.floor(Math.random()*20)+1)}return best+(stats[stat]||0)}
+function log(msg){const div=document.createElement('div');div.innerHTML=msg;logDiv.prepend(div)}
+function updateCooldownDisplay(){const npc=npcSelect.value;if(npc==='Another Player'){cooldownDisplay.textContent='';enableButtons(true);return}const until=Number(getCookie(getNpcCooldownKey(npc)))||0;const remaining=until-Date.now();if(remaining>0){const sec=Math.ceil(remaining/1000);cooldownDisplay.textContent=`Cooldown: ${sec}s`;enableButtons(false)}else{cooldownDisplay.textContent='Ready';enableButtons(true)}}
+function enableButtons(enabled){charmBtn.disabled=!enabled;stealBtn.disabled=!enabled;attackBtn.disabled=!enabled}
+npcSelect.onchange=updateCooldownDisplay;setInterval(updateCooldownDisplay,500);
+
+function interact(type){
+  const target=npcSelect.value;
+  if(target!=='Another Player'&&isOnCooldown(target)){log(`<span class="fail">${target} is on cooldown ⏳</span>`);return}
+
+  let statUsed='cha';
+  if(type==='steal') statUsed='dex';
+  if(type==='attack'){
+    const atk=document.getElementById('attackType').value;
+    statUsed=atk==='melee'?'str':atk==='ranged'?'dex':'int';
   }
-}
-function saveCharacterToCookie(){
-  setCookie('mm_character_name', currentCharacterName);
-  setCookie('mm_character_stats', JSON.stringify(currentCharacter));
-}
 
-charSelect.onchange = () => { currentCharacterName = charSelect.value; currentCharacter = JSON.parse(JSON.stringify(characters[currentCharacterName])); saveCharacterToCookie(); renderStats(); renderItems(); updateCooldownDisplay(); };
-loadCharacterFromCookie();
-renderStats();
-renderItems();
+  const playerRoll=rollDice(statUsed);
 
-function renderStats(){
-  statsDiv.innerHTML='';
-  Object.keys(currentCharacter).forEach(stat=>{
-    const base = characters[currentCharacterName][stat] || 0;
-    const bonus = currentCharacter[stat] - base; // Allow negative values
-    const row = document.createElement('div');
-    row.innerHTML = `<div>${stat.toUpperCase()}</div><div>${base}${bonus!==0 ? (bonus>0 ? ' + '+bonus : ' - '+Math.abs(bonus)) : ''}</div>`;
-    statsDiv.appendChild(row);
-  });
-}
+  const atkType = type==='attack'?document.getElementById('attackType').value.toUpperCase():type.toUpperCase();
 
-function renderItems(){
-  itemsDiv.innerHTML='';
-  Object.keys(currentCharacter).forEach(stat=>{
-    const row = document.createElement('div');
-    const label = document.createElement('span');
-    label.textContent = stat.toUpperCase();
-    label.style.flex='1';
-    const minus = document.createElement('button'); minus.textContent='−'; minus.onclick=()=>adjustStat(stat,-1);
-    const plus = document.createElement('button'); plus.textContent='+'; plus.onclick=()=>adjustStat(stat,1);
-    row.append(label,minus,plus);
-    itemsDiv.appendChild(row);
-  });
-}
+  if(target==='Another Player'){
+    log(`PVP ${type.toUpperCase()} [${atkType}]: Roll = ${playerRoll} 🎲`);
+    return;
+  }
 
-function adjustStat(stat,delta){
-  currentCharacter[stat] = currentCharacter[stat]+delta;
-  saveCharacterToCookie();
-  renderStats();
+  const npc=npcs[target];
+  const npcRoll=Math.floor(Math.random()*20)+1+(npc[statUsed]||0);
+  const success=playerRoll>npcRoll;
+
+  setCooldown(target);
   updateCooldownDisplay();
-}
 
-function getCooldownMs(){ return Math.max(0,3*60*1000-(currentCharacter.con || 0)*15000); }
-function getNpcCooldownKey(npc){ return `mm_cd_${currentCharacterName}_${npc}`; }
-function isOnCooldown(npc){ const until=Number(getCookie(getNpcCooldownKey(npc))); return until && Date.now()<until; }
-function setCooldown(npc){ setCookie(getNpcCooldownKey(npc),Date.now()+getCooldownMs()); }
-function rollDice(stat){ return rollDiceFor(currentCharacter,stat); }
-function rollDiceFor(stats,stat){ const rolls=1+Math.floor((stats.luck||0)/3); let best=0; for(let i=0;i<rolls;i++){ best=Math.max(best,Math.floor(Math.random()*20)+1); } return best+(stats[stat]||0); }
-function log(msg){ const div=document.createElement('div'); div.innerHTML=msg; logDiv.prepend(div); }
-function updateCooldownDisplay(){
-  const npc=npcSelect.value;
-  if(npc==='Another Player'){ cooldownDisplay.textContent=''; enableButtons(true); return; }
-  const until=Number(getCookie(getNpcCooldownKey(npc)))||0;
-  const remaining=until-Date.now();
-  if(remaining>0){ const sec=Math.ceil(remaining/1000); cooldownDisplay.textContent=`Cooldown: ${sec}s`; enableButtons(false); }
-  else{ cooldownDisplay.textContent='Ready'; enableButtons(true); }
+  const outcomeText=success?`<span class="success">SUCCESS 🎉</span>`:`<span class="fail">FAIL ❌</span>`;
+  log(`${type.toUpperCase()} vs ${target}${type==='attack'?` [${atkType}]`:''}: ${playerRoll} vs ${npcRoll} → ${outcomeText}`);
 }
-function enableButtons(enabled){ charmBtn.disabled=!enabled; stealBtn.disabled=!enabled; attackBtn.disabled=!enabled; }
-npcSelect.onchange=updateCooldownDisplay; setInterval(updateCooldownDisplay,500);
-function interact(type){ const target=npcSelect.value; if(target!=='Another Player' && isOnCooldown(target)){ log(`<span class="fail">${target} is on cooldown ⏳</span>`); return; }
-let statUsed='cha'; if(type==='steal') statUsed='dex'; if(type==='attack'){ const atk=document.getElementById('attackType').value; statUsed=atk==='melee'?'str':atk==='ranged'?'dex':'int'; }
-const playerRoll=rollDice(statUsed); if(target==='Another Player'){ log(`PVP ${type.toUpperCase()}: Roll = ${playerRoll} 🎲`); return; }
-const npc=npcs[target]; const npcRoll=Math.floor(Math.random()*20)+1+(npc[statUsed]||0); const success=playerRoll>npcRoll; setCooldown(target); updateCooldownDisplay(); const outcomeText=success?`<span class="success">SUCCESS 🎉</span>`:`<span class="fail">FAIL ❌</span>`; log(`${type.toUpperCase()} vs ${target}: ${playerRoll} vs ${npcRoll} → ${outcomeText}`); }
 </script>
 </body>
 </html>
