@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Medieval Murder Mystery</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #1f1b16;
+      color: #f5e9d6;
+      margin: 0;
+      padding: 0;
+    }
+    h1, h2, h3 {
+      margin: 0.5rem 0;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: 280px 1fr; /* NPC column removed */
+      gap: 1rem;
+      padding: 1rem;
+    }
+    .panel {
+      background: #2b241c;
+      border-radius: 10px;
+      padding: 1rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    }
+    select, button {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      background: #3a3026;
+      color: #f5e9d6;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #4b3e30;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.25rem 1rem;
+      font-size: 0.9rem;
+    }
+    .log {
+      height: 250px;
+      overflow-y: auto;
+      background: #17130f;
+      padding: 0.5rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+    .log div {
+      margin-bottom: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+
+<h1 style="padding:1rem">🗡️ Medieval Murder Mystery</h1>
+
+<div class="container">
+  <!-- Character Panel -->
+  <div class="panel">
+    <h2>Character</h2>
+    <select id="characterSelect"></select>
+    <h3>Stats</h3>
+    <div class="stats" id="stats"></div>
+    <h3>Equipment</h3>
+    <div class="items" id="items"></div>
+  </div>
+
+  <!-- Interaction Panel -->
+  <div class="panel">
+    <h2>Interaction</h2>
+    <select id="npcSelect"></select>
+
+    <h3>Action</h3>
+    <button onclick="interact('charm')">Charm</button>
+    <button onclick="interact('steal')">Steal</button>
+    <button onclick="interact('attack')">Attack</button>
+
+    <h3>Attack Type</h3>
+    <select id="attackType">
+      <option value="melee">Melee</option>
+      <option value="ranged">Ranged</option>
+      <option value="magic">Magic</option>
+    </select>
+
+    <h3>Event Log</h3>
+    <div class="log" id="log"></div>
+  </div>
+</div>
+
+<script>
+const npcs = {
+  Queen:{ cha:6, int:5, dex:3, str:2 },
+  Prince:{ cha:4, str:4, dex:3, int:2 },
+  Princess:{ cha:5, int:4, dex:3, str:1 },
+  'Royal Dog':{ cha:1, dex:5, str:3 },
+  'Shop Keeper':{ cha:3, int:4, dex:3 },
+  'Fortune Teller':{ cha:4, int:5, dex:2 },
+  'Guard 1':{ str:4, dex:3, cha:2 },
+  'Guard 2':{ str:4, dex:2, cha:2 },
+  'Town Folk 1':{ cha:3, dex:2 },
+  'Town Folk 2':{ cha:2, dex:3 },
+  'Town Beggar':{ cha:4, dex:3 }
+};
+
+const characters = {
+  Rogue: { str:2, dex:5, con:3, int:2, luck:3, cha:3 },
+  Knight:{ str:5, dex:2, con:4, int:1, luck:2, cha:2 },
+  Mage:  { str:1, dex:2, con:2, int:5, luck:3, cha:3 },
+  Bard:  { str:2, dex:3, con:3, int:3, luck:2, cha:5 }
+};
+
+let currentCharacter = null;
+
+const charSelect = document.getElementById('characterSelect');
+const npcSelect = document.getElementById('npcSelect');
+const statsDiv = document.getElementById('stats');
+const itemsDiv = document.getElementById('items');
+const logDiv = document.getElementById('log');
+
+Object.keys(characters).forEach(c => charSelect.add(new Option(c,c)));
+Object.keys(npcs).forEach(n => npcSelect.add(new Option(n,n)));
+
+charSelect.onchange = () => {
+  currentCharacter = JSON.parse(JSON.stringify(characters[charSelect.value]));
+  renderStats();
+  renderItems();
+};
+
+charSelect.selectedIndex = 0;
+charSelect.onchange();
+
+function renderStats() {
+  statsDiv.innerHTML = '';
+  Object.entries(currentCharacter).forEach(([k,v]) => {
+    statsDiv.innerHTML += `<div>${k.toUpperCase()}</div><div>${v}</div>`;
+  });
+}
+
+function renderItems() {
+  itemsDiv.innerHTML = '';
+  Object.keys(currentCharacter).forEach(stat => {
+    const row = document.createElement('div');
+    row.style.display = 'flex';
+    row.style.gap = '0.25rem';
+
+    const label = document.createElement('span');
+    label.textContent = stat.toUpperCase();
+    label.style.flex = '1';
+
+    const minus = document.createElement('button');
+    minus.textContent = '−';
+    minus.onclick = () => adjustStat(stat, -1);
+
+    const plus = document.createElement('button');
+    plus.textContent = '+';
+    plus.onclick = () => adjustStat(stat, 1);
+
+    row.append(label, minus, plus);
+    itemsDiv.appendChild(row);
+  });
+}
+
+function adjustStat(stat, delta) {
+  currentCharacter[stat] = Math.max(0, currentCharacter[stat] + delta);
+  log(`Adjusted ${stat.toUpperCase()} by ${delta}`);
+  renderStats();
+}
+
+function rollDice(stat) {
+  const rolls = 1 + Math.floor(currentCharacter.luck / 3);
+  let best = 0;
+  for (let i = 0; i < rolls; i++) {
+    best = Math.max(best, Math.floor(Math.random() * 20) + 1);
+  }
+  return best + currentCharacter[stat];
+}
+
+function interact(type) {
+  const npcName = npcSelect.value;
+  const npc = npcs[npcName];
+  let statUsed = 'cha';
+
+  if (type === 'steal') statUsed = 'dex';
+  if (type === 'attack') {
+    const atk = document.getElementById('attackType').value;
+    statUsed = atk === 'melee' ? 'str' : atk === 'ranged' ? 'dex' : 'int';
+  }
+
+  const playerRoll = rollDice(statUsed);
+  const npcRoll = Math.floor(Math.random() * 20) + 1 + (npc[statUsed] || 0);
+  const success = playerRoll > npcRoll;
+
+  log(`${type.toUpperCase()} vs ${npcName}: You ${playerRoll} vs NPC ${npcRoll} → ${success ? 'SUCCESS' : 'FAIL'}`);
+}
+
+function log(msg) {
+  const div = document.createElement('div');
+  div.textContent = msg;
+  logDiv.prepend(div);
+}
+</script>
+
+</body>
+</html>
+
+
