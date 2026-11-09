@@ -1,3 +1,0 @@
-+++
-title = "Locally Connected Layers"
-+++

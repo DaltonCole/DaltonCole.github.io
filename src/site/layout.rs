@@ -5,18 +5,15 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use leptos::{config::LeptosOptions, prelude::*};
 
 const FONTS: &str = "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap";
-const MATHJAX: &str = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js";
 const ANALYTICS_SCRIPT: &str = "https://www.googletagmanager.com/gtag/js?id=G-SPY7S5B91F";
 const ANALYTICS_INIT: &str = "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-SPY7S5B91F');";
 
 /// Label, link, and the first path segment that marks it as the current section.
-const NAV_LINKS: [(&str, &str, &str); 6] = [
+const NAV_LINKS: [(&str, &str, &str); 4] = [
     ("About", "/about/", "about"),
     ("Experience", "/work-experience/", "work-experience"),
-    ("Research", "/research/", "research"),
-    ("Learn", "/learn/", "learn"),
+    ("Résumé", "/resume/", "resume"),
     ("Projects", "/projects/", "projects"),
-    ("Write-Ups", "/writeups/", "writeups"),
 ];
 
 fn current_year() -> u64 {
@@ -45,9 +42,6 @@ fn Header(url: String) -> impl IntoView {
                 <label for="nav-toggle" class="nav-toggle" aria-hidden="true">"☰"</label>
                 <div class="nav-links">
                     {links}
-                    <form class="nav-search" action="/search/">
-                        <input type="search" name="q" placeholder="Search" aria-label="Search"/>
-                    </form>
                     <a class="nav-cta" href="/contact/">"Contact"</a>
                 </div>
             </nav>
@@ -75,7 +69,6 @@ pub fn Document(
     #[prop(into)] title: String,
     #[prop(into)] url: String,
     options: LeptosOptions,
-    #[prop(optional)] math: bool,
     #[prop(optional)] islands: bool,
     children: Children,
 ) -> impl IntoView {
@@ -99,7 +92,6 @@ pub fn Document(
                 <link rel="stylesheet" href="/pkg/daltoncole.css"/>
                 <script async src=ANALYTICS_SCRIPT></script>
                 <script inner_html=ANALYTICS_INIT></script>
-                {math.then(|| view! { <script id="MathJax-script" async src=MATHJAX></script> })}
                 {islands.then(|| view! { <HydrationScripts options=options islands=true/> })}
             </head>
             <body>
@@ -111,37 +103,15 @@ pub fn Document(
     }
 }
 
-/// A long-form page: optional back link, title, and an optional sticky list of sections.
+/// A tool page: a link back to Projects, the title, and the tool.
 #[component]
-pub fn Article(
-    #[prop(into)] title: String,
-    #[prop(optional, into)] back: Option<String>,
-    #[prop(optional, into)] anchor: Option<String>,
-    #[prop(optional)] sections: Vec<(String, String)>,
-    children: Children,
-) -> impl IntoView {
-    let side_nav = (!sections.is_empty()).then(|| {
-        let links = sections
-            .into_iter()
-            .map(|(id, label)| view! { <a href=format!("#{id}")>{label}</a> })
-            .collect_view();
-        view! { <nav class="side-nav" aria-label="On this page">{links}</nav> }
-    });
-    let layout = if side_nav.is_some() {
-        "doc-layout container wide"
-    } else {
-        "container"
-    };
-
+pub fn Article(#[prop(into)] title: String, children: Children) -> impl IntoView {
     view! {
         <section class="doc">
-            <div class=layout>
-                {side_nav}
-                <div class="doc-body">
-                    {back.map(|href| view! { <a class="back-link" href=href>"← Back"</a> })}
-                    <h1 class="doc-title" id=anchor>{title}</h1>
-                    {children()}
-                </div>
+            <div class="container">
+                <a class="back-link" href="/projects/">"← Projects"</a>
+                <h1 class="doc-title">{title}</h1>
+                {children()}
             </div>
         </section>
     }

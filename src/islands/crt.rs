@@ -20,17 +20,38 @@ struct Solution {
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 enum SolveError {
-    NotCoprime,
+    /// Two moduli and the factor they share.
+    NotCoprime(i128, i128, i128),
     TooLarge,
 }
 
 impl SolveError {
-    fn message(self) -> &'static str {
+    fn message(self) -> String {
         match self {
-            Self::NotCoprime => "NOTE: ALL MODS MUST BE CO-PRIME",
-            Self::TooLarge => "Those numbers are too large to solve.",
+            Self::NotCoprime(first, second, shared) => format!(
+                "This system can't be solved this way: {first} and {second} share a factor of \
+                 {shared}. Every modulus must be coprime with the others."
+            ),
+            Self::TooLarge => "Those numbers are too large to solve.".to_string(),
         }
     }
+}
+
+fn gcd(a: i128, b: i128) -> i128 {
+    if b == 0 {
+        a
+    } else {
+        gcd(b, a % b)
+    }
+}
+
+fn shared_factor(moduli: &[i128]) -> Option<SolveError> {
+    moduli.iter().enumerate().find_map(|(index, first)| {
+        moduli[index + 1..].iter().find_map(|second| {
+            let shared = gcd(*first, *second);
+            (shared > 1).then_some(SolveError::NotCoprime(*first, *second, shared))
+        })
+    })
 }
 
 /// Modular inverse of `value` mod `modulus`, if one exists.
@@ -48,6 +69,9 @@ fn inverse(value: i128, modulus: i128) -> Option<i128> {
 fn solve(equations: &[(i128, i128)]) -> Result<Solution, SolveError> {
     let remainders: Vec<i128> = equations.iter().map(|(b, _)| *b).collect();
     let moduli: Vec<i128> = equations.iter().map(|(_, m)| *m).collect();
+    if let Some(error) = shared_factor(&moduli) {
+        return Err(error);
+    }
     let product = moduli
         .iter()
         .try_fold(1_i128, |acc, m| acc.checked_mul(*m))
@@ -55,11 +79,11 @@ fn solve(equations: &[(i128, i128)]) -> Result<Solution, SolveError> {
 
     let others: Vec<i128> = moduli.iter().map(|m| product / m).collect();
     let reduced: Vec<i128> = others.iter().zip(&moduli).map(|(n, m)| n % m).collect();
-    let inverses = reduced
+    let inverses: Vec<i128> = reduced
         .iter()
         .zip(&moduli)
-        .map(|(value, m)| inverse(*value, *m).ok_or(SolveError::NotCoprime))
-        .collect::<Result<Vec<i128>, SolveError>>()?;
+        .map(|(value, m)| inverse(*value, *m).expect("coprime moduli always have inverses"))
+        .collect();
 
     let terms = remainders
         .iter()
@@ -87,37 +111,20 @@ fn solve(equations: &[(i128, i128)]) -> Result<Solution, SolveError> {
     })
 }
 
-fn cells(values: Vec<String>) -> impl IntoView {
-    values
-        .into_iter()
-        .map(|value| view! { <td>{value}</td> })
-        .collect_view()
-}
-
 fn body_rows(rows: Vec<Vec<String>>) -> impl IntoView {
     rows.into_iter()
-        .map(|row| view! { <tr>{cells(row)}</tr> })
+        .map(|row| {
+            let cells = row
+                .into_iter()
+                .map(|value| view! { <td>{value}</td> })
+                .collect_view();
+            view! { <tr>{cells}</tr> }
+        })
         .collect_view()
 }
 
-fn total_row(total: i128) -> impl IntoView {
-    view! { <tr><td></td><td></td><td>"Total: "</td><td>{total.to_string()}</td></tr> }
-}
-
-fn header_b() -> impl IntoView {
-    view! { <th>"b"<sub>"i"</sub></th> }
-}
-
-fn header_n() -> impl IntoView {
-    view! { <th>"N"<sub>"i"</sub></th> }
-}
-
-fn header_x() -> impl IntoView {
-    view! { <th>"x"<sub>"i"</sub></th> }
-}
-
-fn header_term() -> impl IntoView {
-    view! { <th>"b"<sub>"i"</sub>"N"<sub>"i"</sub>"x"<sub>"i"</sub></th> }
+fn subscripted(symbol: &'static str, index: impl ToString) -> impl IntoView {
+    view! { {symbol}<sub>{index.to_string()}</sub> }
 }
 
 fn inverse_work(
@@ -127,17 +134,14 @@ fn inverse_work(
     reduced: i128,
     inverse: i128,
 ) -> impl IntoView {
-    let label = number.to_string();
-    let x = move || view! { "x"<sub>{label.clone()}</sub> };
     view! {
-        <div class="crt-work">
-            <p>{x()}":"</p>
-            <p>{n.to_string()}{x()}" ≡ 1 (mod "{modulus.to_string()}") ⇒"</p>
-            <p>{format!("{n} mod {modulus} = {reduced} ⇒")}</p>
-            <p>{reduced.to_string()}{x()}" ≡ 1 (mod "{modulus.to_string()}") ⇒"</p>
-            <p>"("{reduced.to_string()}" * "<b>{inverse.to_string()}</b>") mod "{modulus.to_string()}" = 1 ⇒"</p>
-            <p>{x()}" ≡ "<b>{inverse.to_string()}</b>" (mod "{modulus.to_string()}")"</p>
-        </div>
+        <li>
+            {subscripted("x", number)}": "
+            {format!("{n} mod {modulus} = {reduced}, and ({reduced} × ")}
+            <b>{inverse.to_string()}</b>
+            {format!(") mod {modulus} = {}, so ", 1 % modulus)}
+            {subscripted("x", number)}" = "<b>{inverse.to_string()}</b>
+        </li>
     }
 }
 
@@ -153,10 +157,37 @@ fn worked_solution(solution: Solution) -> impl IntoView {
         total,
         answer,
     } = solution;
-    let row_count = remainders.len();
+    let count = remainders.len();
     let text = |values: &[i128], index: usize| values[index].to_string();
+    let all_moduli = moduli
+        .iter()
+        .map(i128::to_string)
+        .collect::<Vec<_>>()
+        .join(" × ");
 
-    let term_rows: Vec<Vec<String>> = (0..row_count)
+    let checks = (0..count)
+        .map(|i| {
+            let shown = format!(
+                "{answer} mod {} = {}",
+                moduli[i],
+                remainders[i].rem_euclid(moduli[i])
+            );
+            view! { <li class="pill">{shown}</li> }
+        })
+        .collect_view();
+    let others_rows: Vec<Vec<String>> = (0..count)
+        .map(|i| {
+            vec![
+                (i + 1).to_string(),
+                text(&moduli, i),
+                format!("{product} / {} = {}", moduli[i], others[i]),
+            ]
+        })
+        .collect();
+    let work = (0..count)
+        .map(|i| inverse_work(i + 1, others[i], moduli[i], reduced[i], inverses[i]))
+        .collect_view();
+    let term_rows: Vec<Vec<String>> = (0..count)
         .map(|i| {
             vec![
                 text(&remainders, i),
@@ -166,82 +197,64 @@ fn worked_solution(solution: Solution) -> impl IntoView {
             ]
         })
         .collect();
-    let remainder_rows: Vec<Vec<String>> =
-        (0..row_count).map(|i| vec![text(&remainders, i)]).collect();
-    let all_moduli = moduli
-        .iter()
-        .map(i128::to_string)
-        .collect::<Vec<_>>()
-        .join(" * ");
-    let others_rows: Vec<Vec<String>> = (0..row_count)
-        .map(|i| {
-            vec![
-                text(&remainders, i),
-                format!("{all_moduli} / {} = {}", moduli[i], others[i]),
-            ]
-        })
-        .collect();
-    let inverse_rows: Vec<Vec<String>> = (0..row_count)
-        .map(|i| vec![text(&remainders, i), text(&others, i), text(&inverses, i)])
-        .collect();
-    let work = (0..row_count)
-        .map(|i| inverse_work(i + 1, others[i], moduli[i], reduced[i], inverses[i]))
-        .collect_view();
 
     view! {
-        <div class="table-scroll">
-            <table class="tool-table">
-                <thead><tr>{header_b()}{header_n()}{header_x()}{header_term()}</tr></thead>
-                <tbody>{body_rows(term_rows.clone())}{total_row(total)}</tbody>
-            </table>
+        <div class="crt-answer-card">
+            <div class="stat-label">"Answer"</div>
+            <p class="crt-answer">{format!("x ≡ {answer} (mod {product})")}</p>
+            <p>{format!("Every solution has the form {answer} + {product}k.")}</p>
+            <ul class="pill-list" aria-label="Checks">{checks}</ul>
         </div>
-        <p class="crt-answer"><b>{format!("Final Answer: x ≡ {answer} (mod {product})")}</b></p>
 
-        <h3>"Step 1"</h3>
-        <p>"Create b"<sub>"i"</sub>" column from remainders:"</p>
-        <table class="tool-table">
-            <thead><tr>{header_b()}</tr></thead>
-            <tbody>{body_rows(remainder_rows)}</tbody>
-        </table>
-
-        <h3>"Step 2"</h3>
-        <p>"Create N"<sub>"i"</sub>" column by multiplying all moduli together except the i"<sup>"th"</sup>" row:"</p>
-        <table class="tool-table">
-            <thead><tr>{header_b()}{header_n()}</tr></thead>
-            <tbody>{body_rows(others_rows)}</tbody>
-        </table>
-
-        <h3>"Step 3"</h3>
-        <p>"Create x"<sub>"i"</sub>" column by finding the inverse of N"<sub>"i"</sub>":"</p>
-        {work}
-        <table class="tool-table">
-            <thead><tr>{header_b()}{header_n()}{header_x()}</tr></thead>
-            <tbody>{body_rows(inverse_rows)}</tbody>
-        </table>
-
-        <h3>"Step 4"</h3>
-        <p>"Multiply b"<sub>"i"</sub>", N"<sub>"i"</sub>", and x"<sub>"i"</sub>" together:"</p>
-        <table class="tool-table">
-            <thead><tr>{header_b()}{header_n()}{header_x()}{header_term()}</tr></thead>
-            <tbody>{body_rows(term_rows.clone())}</tbody>
-        </table>
-
-        <h3>"Step 5"</h3>
-        <p>"Add all elements of the b"<sub>"i"</sub>"N"<sub>"i"</sub>"x"<sub>"i"</sub>" column together:"</p>
-        <table class="tool-table">
-            <thead><tr>{header_b()}{header_n()}{header_x()}{header_term()}</tr></thead>
-            <tbody>{body_rows(term_rows)}{total_row(total)}</tbody>
-        </table>
-
-        <h3>"Step 6"</h3>
-        <p>"Mod total by N:"</p>
-        <table class="tool-table">
-            <tbody>
-                <tr><td>{format!("N = {all_moduli} ⇒")}</td></tr>
-                <tr><td>{format!("x ≡ {total} (mod {product}) ⇒")}</td></tr>
-                <tr><td>{format!("x ≡ {answer} (mod {product})")}</td></tr>
-            </tbody>
-        </table>
+        <h2>"How it's solved"</h2>
+        <ol class="crt-steps">
+            <li>
+                <h3>"Multiply the moduli"</h3>
+                <p>{format!("N = {all_moduli} = {product}")}</p>
+            </li>
+            <li>
+                <h3>"Divide N by each modulus"</h3>
+                <p>"N"<sub>"i"</sub>" is the product of every modulus except m"<sub>"i"</sub>"."</p>
+                <div class="table-scroll">
+                    <table class="tool-table">
+                        <thead><tr><th>"i"</th><th>"m"<sub>"i"</sub></th><th>"N"<sub>"i"</sub></th></tr></thead>
+                        <tbody>{body_rows(others_rows)}</tbody>
+                    </table>
+                </div>
+            </li>
+            <li>
+                <h3>"Invert each N"<sub>"i"</sub></h3>
+                <p>"x"<sub>"i"</sub>" is the number that makes N"<sub>"i"</sub>"x"<sub>"i"</sub>" ≡ 1 (mod m"<sub>"i"</sub>")."</p>
+                <ul class="crt-work">{work}</ul>
+            </li>
+            <li>
+                <h3>"Combine"</h3>
+                <p>"Multiply b"<sub>"i"</sub>", the remainder, by N"<sub>"i"</sub>" and x"<sub>"i"</sub>", then add the results."</p>
+                <div class="table-scroll">
+                    <table class="tool-table">
+                        <thead>
+                            <tr>
+                                <th>"b"<sub>"i"</sub></th>
+                                <th>"N"<sub>"i"</sub></th>
+                                <th>"x"<sub>"i"</sub></th>
+                                <th>"b"<sub>"i"</sub>"N"<sub>"i"</sub>"x"<sub>"i"</sub></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {body_rows(term_rows)}
+                            <tr class="total-row">
+                                <td colspan="3">"Total"</td>
+                                <td>{total.to_string()}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </li>
+            <li>
+                <h3>"Reduce by N"</h3>
+                <p>{format!("{total} mod {product} = {answer}")}</p>
+            </li>
+        </ol>
     }
 }
 
@@ -251,18 +264,25 @@ fn digits_only(value: &str) -> String {
     value.chars().filter(char::is_ascii_digit).collect()
 }
 
+fn equation(remainder: &str, modulus: &str) -> Equation {
+    (
+        ArcRwSignal::new(remainder.to_string()),
+        ArcRwSignal::new(modulus.to_string()),
+    )
+}
+
 fn parse_equations(equations: &[Equation]) -> Option<Vec<(i128, i128)>> {
     equations
         .iter()
         .map(|(remainder, modulus)| {
-            let b = remainder.get_untracked().parse::<i128>().ok()?;
-            let m = modulus.get_untracked().parse::<i128>().ok()?;
+            let b = remainder.get().parse::<i128>().ok()?;
+            let m = modulus.get().parse::<i128>().ok()?;
             (m > 0).then_some((b, m))
         })
         .collect()
 }
 
-fn number_input(value: ArcRwSignal<String>, label: &'static str) -> impl IntoView {
+fn number_input(value: ArcRwSignal<String>, label: String) -> impl IntoView {
     let writer = value.clone();
     view! {
         <input
@@ -276,69 +296,76 @@ fn number_input(value: ArcRwSignal<String>, label: &'static str) -> impl IntoVie
     }
 }
 
-#[derive(Clone)]
-enum Outcome {
-    Incomplete,
-    Failed(SolveError),
-    Solved(Solution),
-}
-
 #[island]
 pub fn ChineseRemainderSolver() -> impl IntoView {
-    let new_equation = || -> Equation {
-        (
-            ArcRwSignal::new(String::new()),
-            ArcRwSignal::new(String::new()),
-        )
-    };
-    let equations = RwSignal::new(vec![new_equation(), new_equation()]);
-    let outcome = RwSignal::new(None::<Outcome>);
+    const MINIMUM_EQUATIONS: usize = 2;
 
-    let calculate = move |_| {
-        let result = match parse_equations(&equations.get_untracked()) {
-            None => Outcome::Incomplete,
-            Some(parsed) => match solve(&parsed) {
-                Ok(solution) => Outcome::Solved(solution),
-                Err(error) => Outcome::Failed(error),
-            },
-        };
-        outcome.set(Some(result));
+    let equations = RwSignal::new(vec![equation("", ""), equation("", "")]);
+
+    let load_example = move |_| {
+        equations.set(vec![
+            equation("2", "3"),
+            equation("3", "5"),
+            equation("2", "7"),
+        ]);
     };
 
     let inputs = move || {
-        equations
-            .get()
-            .into_iter()
-            .map(|(remainder, modulus)| {
+        let list = equations.get();
+        let removable = list.len() > MINIMUM_EQUATIONS;
+        list.into_iter()
+            .enumerate()
+            .map(|(index, (remainder, modulus))| {
+                let number = index + 1;
+                let remove = removable.then(|| {
+                    view! {
+                        <button
+                            type="button"
+                            class="icon-btn"
+                            aria-label=format!("Remove equation {number}")
+                            title="Remove equation"
+                            on:click=move |_| equations.update(|list| { list.remove(index); })
+                        >
+                            "×"
+                        </button>
+                    }
+                });
                 view! {
-                    <p class="crt-equation">
-                        "x ≡ "{number_input(remainder, "Remainder")}" (mod "{number_input(modulus, "Modulus")}")"
-                    </p>
+                    <div class="crt-equation">
+                        <span>"x ≡"</span>
+                        {number_input(remainder, format!("Remainder {number}"))}
+                        <span>"(mod"</span>
+                        {number_input(modulus, format!("Modulus {number}"))}
+                        <span>")"</span>
+                        {remove}
+                    </div>
                 }
             })
             .collect_view()
     };
 
     let result = move || {
-        outcome.get().map(|result| match result {
-            Outcome::Solved(solution) => worked_solution(solution).into_any(),
-            Outcome::Failed(error) => view! { <p class="crt-answer"><b>{error.message()}</b></p> }.into_any(),
-            Outcome::Incomplete => {
-                view! { <p class="crt-answer"><b>"Enter a whole number in every box, and moduli above zero."</b></p> }
-                    .into_any()
-            }
-        })
+        match parse_equations(&equations.get()).map(|parsed| solve(&parsed)) {
+        None => view! { <p class="tool-empty">"Fill in every box to see the answer. Moduli must be at least 1."</p> }
+            .into_any(),
+        Some(Ok(solution)) => worked_solution(solution).into_any(),
+        Some(Err(error)) => view! { <p class="tool-hint" role="alert">{error.message()}</p> }.into_any(),
+    }
     };
 
     view! {
         <div class="crt-inputs">{inputs}</div>
         <div class="button-row">
-            <button type="button" class="btn btn-secondary" on:click=move |_| equations.update(|list| list.push(new_equation()))>
-                "Add Equation"
+            <button
+                type="button"
+                class="btn btn-secondary"
+                on:click=move |_| equations.update(|list| list.push(equation("", "")))
+            >
+                "Add equation"
             </button>
-            <button type="button" class="btn btn-primary" on:click=calculate>"Calculate"</button>
+            <button type="button" class="btn btn-secondary" on:click=load_example>"Try an example"</button>
         </div>
-        <div class="crt-result">{result}</div>
+        <div class="crt-result" aria-live="polite">{result}</div>
     }
 }
 
@@ -364,7 +391,22 @@ mod tests {
 
     #[test]
     fn shared_factors_are_reported() {
-        assert_eq!(solve(&[(1, 4), (3, 6)]), Err(SolveError::NotCoprime));
+        assert_eq!(
+            solve(&[(1, 4), (3, 6)]),
+            Err(SolveError::NotCoprime(4, 6, 2))
+        );
+    }
+
+    #[test]
+    fn the_error_names_the_moduli_at_fault() {
+        let error = solve(&[(1, 5), (1, 9), (1, 12)]).unwrap_err();
+        assert_eq!(error, SolveError::NotCoprime(9, 12, 3));
+        assert!(error.message().contains("9 and 12 share a factor of 3"));
+    }
+
+    #[test]
+    fn a_modulus_of_one_is_allowed() {
+        assert_eq!(solve(&[(0, 1), (3, 5)]).unwrap().answer, 3);
     }
 
     #[test]

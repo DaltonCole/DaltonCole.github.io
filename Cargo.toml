@@ -22,25 +22,12 @@ console_error_panic_hook = { version = "0.1", optional = true }
 
 # Build-time only: none of this reaches the browser.
 axum = { version = "0.8", optional = true }
-pulldown-cmark = { version = "0.13", default-features = false, features = ["html"], optional = true }
-syntect = { version = "5", default-features = false, features = ["default-fancy"], optional = true }
 tokio = { version = "1", features = ["macros", "rt-multi-thread"], optional = true }
-toml = { version = "0.9", optional = true }
 tower-http = { version = "0.6", features = ["fs"], optional = true }
-walkdir = { version = "2", optional = true }
 
 [features]
 hydrate = ["leptos/hydrate", "dep:console_error_panic_hook"]
-ssr = [
-    "leptos/ssr",
-    "dep:axum",
-    "dep:pulldown-cmark",
-    "dep:syntect",
-    "dep:tokio",
-    "dep:toml",
-    "dep:tower-http",
-    "dep:walkdir",
-]
+ssr = ["leptos/ssr", "dep:axum", "dep:tokio", "dep:tower-http"]
 
 # Keeps the browser download small; only pages with interactive tools load it.
 [profile.wasm-release]
@@ -64,4 +51,3 @@ bin-default-features = false
 lib-features = ["hydrate"]
 lib-default-features = false
 lib-profile-release = "wasm-release"
-watch-additional-files = ["content"]

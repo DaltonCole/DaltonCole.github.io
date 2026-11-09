@@ -1,7 +1,0 @@
-+++
-title = "Tmp"
-+++
-
-```javascript
-
-```

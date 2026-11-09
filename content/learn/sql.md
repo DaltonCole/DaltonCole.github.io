@@ -1,4 +1,0 @@
-+++
-title = "Sql"
-description = ""
-+++

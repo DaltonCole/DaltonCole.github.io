@@ -15,17 +15,9 @@ cargo leptos build --release && ./target/release/daltoncole  # production build,
 
 Pushing to `main` builds and deploys the site through `.github/workflows/deploy.yml`.
 
-## Adding content
+## Where things live
 
-A Markdown file's path is its URL: `content/learn/rust/traits.md` is `/learn/rust/traits/`.
-Each file starts with TOML front matter:
-
-```
-+++
-title = "Traits"
-+++
-```
-
-Parent Learn pages are assembled from their children, so a new topic only needs its own file.
-Set `math = true` to use `$...$` and `$$...$$` on a page. Code blocks are highlighted at build
-time. Files in `public/` are copied to the site root as they are.
+- `src/site/profile.rs`: Home, About, Work Experience, Résumé, and Contact.
+- `src/site/pages.rs`: the Projects page and the list of pages on the site.
+- `src/islands/`: the interactive tools.
+- `public/`: copied to the site root as it is, including the PDFs and images.

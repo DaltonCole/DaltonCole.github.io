@@ -1,8 +1,6 @@
 //! Renders the whole site to static files in the site root.
 
-mod content;
 mod layout;
-mod markdown;
 mod pages;
 mod profile;
 
@@ -12,8 +10,6 @@ use std::{
 };
 
 use leptos::config::LeptosOptions;
-
-use content::Content;
 
 const ORIGIN: &str = "https://daltoncole.com";
 
@@ -40,9 +36,8 @@ fn sitemap(urls: &[String]) -> String {
 }
 
 pub fn generate(options: &LeptosOptions) -> io::Result<()> {
-    let content = Content::load(Path::new("content"))?;
     let root = PathBuf::from(options.site_root.as_ref());
-    let rendered = pages::render_all(options, &content);
+    let rendered = pages::render_all(options);
 
     let mut listed = Vec::new();
     for page in &rendered {
@@ -73,15 +68,15 @@ mod tests {
         assert_eq!(output_path(root, ""), root.join("index.html"));
         assert_eq!(output_path(root, "404"), root.join("404.html"));
         assert_eq!(
-            output_path(root, "learn/rust"),
-            root.join("learn/rust/index.html")
+            output_path(root, "projects/phase-10-score-keeper"),
+            root.join("projects/phase-10-score-keeper/index.html")
         );
     }
 
     #[test]
     fn sitemap_uses_the_real_domain_and_trailing_slashes() {
-        let xml = sitemap(&[String::new(), "learn/rust".to_string()]);
+        let xml = sitemap(&[String::new(), "projects".to_string()]);
         assert!(xml.contains("<loc>https://daltoncole.com/</loc>"));
-        assert!(xml.contains("<loc>https://daltoncole.com/learn/rust/</loc>"));
+        assert!(xml.contains("<loc>https://daltoncole.com/projects/</loc>"));
     }
 }

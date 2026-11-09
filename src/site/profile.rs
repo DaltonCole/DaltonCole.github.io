@@ -7,10 +7,7 @@ const PROFILE_PHOTO: &str = "/static/home/images/profile_pic.jpg";
 const CAGA_POSTER: &str = "/static/home/pdf/TITANS_CCD2018_CAGA.PDF";
 const FROGEYE_POSTER: &str = "/static/home/pdf/FrogEye_CCD_2017.PDF";
 const CONAN_POSTER: &str = "/static/home/pdf/Conan_CCD_2017.PDF";
-
-/// Set to a Formspree endpoint (`https://formspree.io/f/xxxxxxx`) to show the contact form.
-/// It stays hidden until then, because a form with no endpoint would lose people's messages.
-const CONTACT_FORM_ENDPOINT: Option<&str> = None;
+const FACE_AUTH_PAPER: &str = "/static/research/papers/attack_face_authentication.pdf";
 
 #[component]
 fn Ext(#[prop(into)] href: String, children: Children) -> impl IntoView {
@@ -18,7 +15,7 @@ fn Ext(#[prop(into)] href: String, children: Children) -> impl IntoView {
 }
 
 #[component]
-pub fn Card(
+fn Card(
     #[prop(into)] href: String,
     #[prop(into)] title: String,
     accent: &'static str,
@@ -41,17 +38,17 @@ pub fn Home() -> impl IntoView {
     view! {
         <section class="hero">
             <div class="container">
-                <div class="eyebrow hero-tag">"Software Engineer · Ph.D., Computer Science"</div>
+                <div class="eyebrow hero-tag">"Senior Computer Scientist · Ph.D., Computer Science"</div>
                 <h1>"Hi, I'm Dalton Cole."</h1>
                 <p class="lede">
-                    "I'm a research scientist at Sandia National Laboratories, where I work on "
-                    "automation and machine learning. I hold a Ph.D. in Computer Science from the "
-                    "University of Missouri, with a research focus on adversarial robustness and "
-                    "security in ML systems."
+                    "I'm a Senior Computer Scientist at Sandia National Laboratories, where I work "
+                    "on machine learning and remote sensing. I hold a Ph.D. in Computer Science "
+                    "from the University of Missouri, with a research focus on adversarial "
+                    "robustness and security in ML systems."
                 </p>
                 <div class="button-row">
                     <a class="btn btn-primary" href="/contact/">"Get in touch"</a>
-                    <a class="btn btn-secondary" href="/work-experience/">"See my experience"</a>
+                    <a class="btn btn-secondary" href="/resume/">"View my résumé"</a>
                 </div>
             </div>
         </section>
@@ -65,31 +62,10 @@ pub fn Home() -> impl IntoView {
                         <p>"Who I am, and the path that got me here — a career timeline from high school to Sandia."</p>
                     </Card>
                     <Card href="/work-experience/" title="Experience" accent="amber" icon="E">
-                        <p>"Research and teaching roles, leadership, and the projects behind them."</p>
+                        <p>"Research and teaching roles, publications, leadership, and the projects behind them."</p>
                     </Card>
-                    <Card href="/contact/" title="Contact" accent="cyan" icon="C">
-                        <p>"Have a question or an opportunity? Reach out — I'd love to hear from you."</p>
-                    </Card>
-                </div>
-            </div>
-        </section>
-
-        <section>
-            <div class="container">
-                <div class="eyebrow" style="color: var(--pink)">"Dig in"</div>
-                <h2>"More on the site"</h2>
-                <div class="card-grid">
-                    <Card href="/projects/" title="Projects" accent="pink">
-                        <p>"Small tools and experiments, like a Phase 10 score keeper."</p>
-                    </Card>
-                    <Card href="/research/" title="Research" accent="violet">
-                        <p>"Papers, projects, and notes on adversarial machine learning."</p>
-                    </Card>
-                    <Card href="/writeups/" title="Write-ups" accent="amber">
-                        <p>"Solutions and explanations for Kattis competitive programming problems."</p>
-                    </Card>
-                    <Card href="/learn/" title="Learn" accent="cyan">
-                        <p>"Notes on topics I'm studying, organized by theme and subject."</p>
+                    <Card href="/projects/" title="Projects" accent="pink" icon="P">
+                        <p>"Interactive tools written in Rust, like a Phase 10 score keeper."</p>
                     </Card>
                 </div>
             </div>
@@ -124,8 +100,9 @@ pub fn About() -> impl IntoView {
                     <h1>"Dalton Russell Cole"</h1>
                     <p>
                         "Also known as Dr. Cole, Daltie, Coltie, and a handful of other names that "
-                        "stuck over the years. I'm a software engineer whose research interests "
-                        "center on automation and machine learning — and I'm glad you stopped by."
+                        "stuck over the years. I'm a Senior Computer Scientist at Sandia National "
+                        "Laboratories, working on machine learning and remote sensing — and I'm "
+                        "glad you stopped by."
                     </p>
                 </div>
             </div>
@@ -135,10 +112,13 @@ pub fn About() -> impl IntoView {
             <div class="container">
                 <h2>"Timeline"</h2>
                 <div class="timeline">
-                    <TimelineItem date="July 2021 — Present" title="Sandia National Laboratories" accent="pink">
-                        "Joined SNL (not the comedy show) to work on automation and machine learning research full-time."
+                    <TimelineItem date="July 2021 — Present" title="Senior Computer Scientist at Sandia National Laboratories" accent="pink">
+                        "Joined SNL (not the comedy show) full-time. I support the development and "
+                        "analysis of wide-view, visual-based satellite remote sensing sensors, lead "
+                        "a team of engineers analyzing remote sensing data, design graph neural "
+                        "networks for event classification, and mentor Ph.D. and undergraduate interns."
                     </TimelineItem>
-                    <TimelineItem date="June 2021" title="Ph.D. in Computer Science" accent="violet">
+                    <TimelineItem date="July 2021" title="Ph.D. in Computer Science" accent="violet">
                         "Graduated with my Ph.D. in Computer Science from "
                         <Ext href="https://missouri.edu/">"Mizzou"</Ext>
                         "."
@@ -158,7 +138,7 @@ pub fn About() -> impl IntoView {
                         <Ext href="https://www.mst.edu/">"Missouri S&T"</Ext>
                         " with a 3.92/4.0 GPA."
                     </TimelineItem>
-                    <TimelineItem date="May 2017 – Dec. 2019" title="Intern at Sandia National Laboratories" accent="violet">
+                    <TimelineItem date="May 2017 – Dec. 2019" title="Cybersecurity Intern at Sandia National Laboratories" accent="violet">
                         "Worked across 7 different projects, ranging from the 1553 data bus "
                         "protocol on aerial vehicles to machine learning and data analytics."
                     </TimelineItem>
@@ -222,6 +202,8 @@ fn Role(
 pub fn Experience() -> impl IntoView {
     let side_links = [
         ("#sandia", "Sandia"),
+        ("#publications", "Publications"),
+        ("#research", "Research Projects"),
         ("#teaching", "Teaching"),
         ("#cerner", "Cerner"),
         ("#database-gta", "Database GTA"),
@@ -239,8 +221,8 @@ pub fn Experience() -> impl IntoView {
                 <div class="eyebrow" style="color: var(--amber)">"Experience"</div>
                 <h1>"Work & Leadership"</h1>
                 <p class="lede">
-                    "Research, teaching, and organizational leadership from Sandia National "
-                    "Laboratories back through undergrad."
+                    "Research, publications, teaching, and organizational leadership from Sandia "
+                    "National Laboratories back through undergrad."
                 </p>
                 <div class="button-row">
                     <a class="btn btn-primary" href=RESUME target="_blank" rel="noopener">"Download résumé (PDF)"</a>
@@ -265,6 +247,32 @@ pub fn Experience() -> impl IntoView {
                         <Poster title="Conan: Emulytics on the 1553 Protocol" href=CONAN_POSTER/>
                         <SubSection title="Other">
                             <p>"Data analytics, building Python modules in C++, and software analysis."</p>
+                        </SubSection>
+                    </Role>
+
+                    <Role id="publications" when="Peer-reviewed" accent="pink" title="Publications">
+                        <p>
+                            <strong>"Dalton Cole"</strong>
+                            ", Sara Newman, Dan Lin. "
+                            <Ext href=FACE_AUTH_PAPER>"A New Facial Authentication Pitfall and Remedy in Web Services"</Ext>
+                            ". "
+                            <em>"IEEE Transactions on Dependable and Secure Computing"</em>
+                            ", vol. 19, no. 4, pp. 2635–2647, July–Aug. 2022."
+                        </p>
+                    </Role>
+
+                    <Role id="research" when="2019 – 2021" accent="cyan" title="Research Projects">
+                        <SubSection title="Deepfake Detector Attack/Defense">
+                            <p>"Attacking and defending XceptionNet from a data poisoning attack (2021)."</p>
+                        </SubSection>
+                        <SubSection title="Facial Authentication Attack/Defense">
+                            <p>"Attacking and defending FaceNet from a data poisoning attack (2020)."</p>
+                        </SubSection>
+                        <SubSection title="Grammar Induction">
+                            <ul>
+                                <li><Ext href="https://github.com/DaltonCole/Grammar-Malware-Analysis">"Grammar Malware Analysis"</Ext>" (2019)"</li>
+                                <li><Ext href="https://github.com/DaltonCole/research_ea">"Evolutionary Algorithm Based Grammar Induction"</Ext>" (2019)"</li>
+                            </ul>
                         </SubSection>
                     </Role>
 
@@ -400,70 +408,29 @@ pub fn Experience() -> impl IntoView {
 
 #[component]
 pub fn Contact() -> impl IntoView {
-    let lede = if CONTACT_FORM_ENDPOINT.is_some() {
-        "Question, opportunity, or just want to say hi? Send a message below, or reach out directly."
-    } else {
-        "Question, opportunity, or just want to say hi? Reach out directly."
-    };
-    let layout = if CONTACT_FORM_ENDPOINT.is_some() {
-        "container contact-grid"
-    } else {
-        "container"
-    };
-
-    let form = CONTACT_FORM_ENDPOINT.map(|action| {
-        view! {
-            <div>
-                <h2>"Send a message"</h2>
-                <form action=action method="POST">
-                    <div class="field">
-                        <label for="name">"Name"</label>
-                        <input id="name" name="name" type="text" required/>
-                    </div>
-                    <div class="field">
-                        <label for="email">"Email"</label>
-                        <input id="email" name="email" type="email" required/>
-                    </div>
-                    <div class="field">
-                        <label for="message">"Message"</label>
-                        <textarea id="message" name="message" rows="6" required></textarea>
-                    </div>
-                    <button class="btn btn-primary" type="submit">"Send message"</button>
-                    <p class="form-note">"Sent via Formspree — replies go straight to my inbox."</p>
-                </form>
-            </div>
-        }
-    });
-
     view! {
         <section>
             <div class="container">
                 <div class="eyebrow" style="color: var(--cyan)">"Contact"</div>
                 <h1>"Let's talk."</h1>
-                <p class="lede">{lede}</p>
-            </div>
-        </section>
-
-        <section>
-            <div class=layout>
-                <div>
-                    <h2>"Ways to reach me"</h2>
-                    <div class="contact-methods">
-                        <a class="contact-method" href="mailto:contact@daltoncole.com">
-                            <span class="dot"></span>
-                            <span>"contact@daltoncole.com"</span>
-                        </a>
-                        <a class="contact-method" href="https://github.com/DaltonCole" target="_blank" rel="noopener">
-                            <span class="dot"></span>
-                            <span>"GitHub — DaltonCole"</span>
-                        </a>
-                        <a class="contact-method" href="https://www.linkedin.com/in/daltoncole1/" target="_blank" rel="noopener">
-                            <span class="dot"></span>
-                            <span>"LinkedIn — daltoncole1"</span>
-                        </a>
-                    </div>
+                <p class="lede">"Question, opportunity, or just want to say hi? Here's where to find me."</p>
+                <div class="contact-methods">
+                    <a class="contact-method" href="mailto:contact@daltoncole.com">
+                        <span class="dot"></span>
+                        <span class="contact-label">"Email"</span>
+                        <span>"contact@daltoncole.com"</span>
+                    </a>
+                    <a class="contact-method" href="https://github.com/DaltonCole" target="_blank" rel="noopener">
+                        <span class="dot"></span>
+                        <span class="contact-label">"GitHub"</span>
+                        <span>"DaltonCole"</span>
+                    </a>
+                    <a class="contact-method" href="https://www.linkedin.com/in/daltoncole1/" target="_blank" rel="noopener">
+                        <span class="dot"></span>
+                        <span class="contact-label">"LinkedIn"</span>
+                        <span>"daltoncole1"</span>
+                    </a>
                 </div>
-                {form}
             </div>
         </section>
     }
