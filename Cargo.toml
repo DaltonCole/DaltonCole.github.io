@@ -1,0 +1,67 @@
+[package]
+name = "daltoncole"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[[bin]]
+name = "daltoncole"
+path = "src/main.rs"
+
+[dependencies]
+js-sys = "0.3"
+leptos = { version = "0.8.23", features = ["islands"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+wasm-bindgen = "0.2"
+web-sys = { version = "0.3", features = ["Document", "HtmlDocument", "Storage", "Window"] }
+console_error_panic_hook = { version = "0.1", optional = true }
+
+# Build-time only: none of this reaches the browser.
+axum = { version = "0.8", optional = true }
+pulldown-cmark = { version = "0.13", default-features = false, features = ["html"], optional = true }
+syntect = { version = "5", default-features = false, features = ["default-fancy"], optional = true }
+tokio = { version = "1", features = ["macros", "rt-multi-thread"], optional = true }
+toml = { version = "0.9", optional = true }
+tower-http = { version = "0.6", features = ["fs"], optional = true }
+walkdir = { version = "2", optional = true }
+
+[features]
+hydrate = ["leptos/hydrate", "dep:console_error_panic_hook"]
+ssr = [
+    "leptos/ssr",
+    "dep:axum",
+    "dep:pulldown-cmark",
+    "dep:syntect",
+    "dep:tokio",
+    "dep:toml",
+    "dep:tower-http",
+    "dep:walkdir",
+]
+
+# Keeps the browser download small; only pages with interactive tools load it.
+[profile.wasm-release]
+inherits = "release"
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+
+[package.metadata.leptos]
+output-name = "daltoncole"
+site-root = "target/site"
+site-pkg-dir = "pkg"
+style-file = "style/main.css"
+assets-dir = "public"
+site-addr = "127.0.0.1:3000"
+reload-port = 3001
+env = "DEV"
+bin-features = ["ssr"]
+bin-default-features = false
+lib-features = ["hydrate"]
+lib-default-features = false
+lib-profile-release = "wasm-release"
+watch-additional-files = ["content"]

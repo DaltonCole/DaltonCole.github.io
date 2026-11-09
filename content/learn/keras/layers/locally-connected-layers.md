@@ -1,0 +1,3 @@
++++
+title = "Locally Connected Layers"
++++
