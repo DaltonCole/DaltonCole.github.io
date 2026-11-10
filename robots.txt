@@ -1,4 +1,0 @@
-User-Agent: *
-Disallow: /admin
-Allow: /
-Sitemap: http://www.daltoncole.com/sitemap.xml
