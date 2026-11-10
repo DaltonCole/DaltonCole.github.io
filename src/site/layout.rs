@@ -4,9 +4,9 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use leptos::{config::LeptosOptions, prelude::*};
 
-const FONTS: &str = "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap";
-const ANALYTICS_SCRIPT: &str = "https://www.googletagmanager.com/gtag/js?id=G-SPY7S5B91F";
-const ANALYTICS_INIT: &str = "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-SPY7S5B91F');";
+use super::ORIGIN;
+
+const SOCIAL_CARD: &str = "/static/home/images/social-card.png";
 
 /// Label, link, and the first path segment that marks it as the current section.
 const NAV_LINKS: [(&str, &str, &str); 4] = [
@@ -37,7 +37,7 @@ fn Header(url: String) -> impl IntoView {
     view! {
         <header class="site-header">
             <nav class="site-nav">
-                <a class="brand" href="/">"DC"</a>
+                <a class="brand" href="/">"DRC"</a>
                 <input type="checkbox" id="nav-toggle" class="nav-toggle-box" aria-label="Toggle navigation"/>
                 <label for="nav-toggle" class="nav-toggle" aria-hidden="true">"☰"</label>
                 <div class="nav-links">
@@ -62,11 +62,19 @@ fn Footer() -> impl IntoView {
     }
 }
 
+/// `view!` has no `property` attribute on `<meta>`, which Open Graph tags need.
+fn open_graph(property: &'static str, content: impl Into<String>) -> impl IntoView {
+    leptos::html::meta()
+        .attr("property", property)
+        .attr("content", content.into())
+}
+
 /// A complete HTML document. `islands` loads the WebAssembly bundle, so only pages with an
 /// interactive tool pay for it.
 #[component]
 pub fn Document(
     #[prop(into)] title: String,
+    #[prop(into)] description: String,
     #[prop(into)] url: String,
     options: LeptosOptions,
     #[prop(optional)] islands: bool,
@@ -77,21 +85,37 @@ pub fn Document(
     } else {
         format!("{title} | Dalton Cole")
     };
+    let canonical = if url.is_empty() {
+        format!("{ORIGIN}/")
+    } else {
+        format!("{ORIGIN}/{url}/")
+    };
+    let is_not_found = url == "404";
+    let social_image = format!("{ORIGIN}{SOCIAL_CARD}");
 
     view! {
         <html lang="en">
             <head>
                 <meta charset="utf-8"/>
                 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-                <meta name="description" content="Dalton Cole — software engineer and researcher."/>
-                <title>{full_title}</title>
+                <title>{full_title.clone()}</title>
+                <meta name="description" content=description.clone()/>
+                {is_not_found.then(|| view! { <meta name="robots" content="noindex"/> })}
+                {(!is_not_found).then(|| view! {
+                    <link rel="canonical" href=canonical.clone()/>
+                    {open_graph("og:url", canonical)}
+                })}
+                {open_graph("og:type", "website")}
+                {open_graph("og:site_name", "Dalton Cole")}
+                {open_graph("og:title", full_title)}
+                {open_graph("og:description", description)}
+                {open_graph("og:image", social_image)}
+                {open_graph("og:image:width", "1200")}
+                {open_graph("og:image:height", "630")}
+                {open_graph("og:image:alt", "Dalton Cole, Senior Computer Scientist")}
+                <meta name="twitter:card" content="summary_large_image"/>
                 <link rel="icon" href="/static/home/images/favicon.ico"/>
-                <link rel="preconnect" href="https://fonts.googleapis.com"/>
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
-                <link rel="stylesheet" href=FONTS/>
                 <link rel="stylesheet" href="/pkg/daltoncole.css"/>
-                <script async src=ANALYTICS_SCRIPT></script>
-                <script inner_html=ANALYTICS_INIT></script>
                 {islands.then(|| view! { <HydrationScripts options=options islands=true/> })}
             </head>
             <body>

@@ -8,6 +8,17 @@ const CAGA_POSTER: &str = "/static/home/pdf/TITANS_CCD2018_CAGA.PDF";
 const FROGEYE_POSTER: &str = "/static/home/pdf/FrogEye_CCD_2017.PDF";
 const CONAN_POSTER: &str = "/static/home/pdf/Conan_CCD_2017.PDF";
 const FACE_AUTH_PAPER: &str = "/static/research/papers/attack_face_authentication.pdf";
+const FACE_AUTH_DOI: &str = "https://doi.org/10.1109/TDSC.2021.3067794";
+const FACE_AUTH_WRITEUP: &str =
+    "https://blog.chameleoncloud.org/posts/a-new-facial-authentication-pitfall-and-remedy-in-web-service/";
+const DISSERTATION: &str =
+    "https://mospace.umsystem.edu/items/7a46c56e-ef97-4b60-aa9a-6b1e90ec3a71";
+const TEACHING_PHOTO: &str = "/static/home/images/dalton_is_the_best.jpg";
+const LEADERSHIP_AWARD_PHOTO: &str = "/static/home/images/leadership_award.jpg";
+const SIG_COMP_WIN_PHOTO: &str = "/static/home/images/sig_comp.jpg";
+const SIG_COMP_GROUP_PHOTO: &str = "/static/home/images/sig_comp_group.jpg";
+const SIG_SEC_PHOTO: &str = "/static/home/images/sig_sec_me.jpg";
+const ASUM_PHOTO: &str = "/static/home/images/clair_mccaskill.jpg";
 
 #[component]
 fn Ext(#[prop(into)] href: String, children: Children) -> impl IntoView {
@@ -181,6 +192,24 @@ fn Poster(title: &'static str, href: &'static str) -> impl IntoView {
     }
 }
 
+/// `width` and `height` are the file's real size. They let the browser reserve the space before a
+/// lazy photo loads, so the side menu's jump links land in the right place.
+#[component]
+fn Photo(
+    src: &'static str,
+    alt: &'static str,
+    width: u32,
+    height: u32,
+    #[prop(optional)] narrow: bool,
+) -> impl IntoView {
+    let class = if narrow {
+        "exp-photo exp-photo-narrow"
+    } else {
+        "exp-photo"
+    };
+    view! { <img class=class src=src alt=alt width=width height=height loading="lazy"/> }
+}
+
 #[component]
 fn Role(
     id: &'static str,
@@ -204,9 +233,9 @@ pub fn Experience() -> impl IntoView {
         ("#sandia", "Sandia"),
         ("#publications", "Publications"),
         ("#research", "Research Projects"),
+        ("#database-gta", "Database GTA"),
         ("#teaching", "Teaching"),
         ("#cerner", "Cerner"),
-        ("#database-gta", "Database GTA"),
         ("#acm", "ACM"),
         ("#asum", "ASUM"),
         ("#other", "Other"),
@@ -250,33 +279,90 @@ pub fn Experience() -> impl IntoView {
                         </SubSection>
                     </Role>
 
-                    <Role id="publications" when="Peer-reviewed" accent="pink" title="Publications">
+                    <Role id="publications" when="2021 – 2022" accent="pink" title="Publications">
                         <p>
                             <strong>"Dalton Cole"</strong>
                             ", Sara Newman, Dan Lin. "
                             <Ext href=FACE_AUTH_PAPER>"A New Facial Authentication Pitfall and Remedy in Web Services"</Ext>
                             ". "
                             <em>"IEEE Transactions on Dependable and Secure Computing"</em>
-                            ", vol. 19, no. 4, pp. 2635–2647, July–Aug. 2022."
+                            ", vol. 19, no. 4, pp. 2635–2647, July–Aug. 2022. "
+                            <Ext href=FACE_AUTH_DOI>"DOI"</Ext>
+                            "."
+                        </p>
+                        <p>
+                            <strong>"Dalton Russell Cole"</strong>
+                            ". "
+                            <Ext href=DISSERTATION>"Defeat Data Poisoning Attacks on Facial Recognition Applications"</Ext>
+                            ". Ph.D. dissertation, University of Missouri–Columbia, 2021."
                         </p>
                     </Role>
 
-                    <Role id="research" when="2019 – 2021" accent="cyan" title="Research Projects">
-                        <SubSection title="Deepfake Detector Attack/Defense">
-                            <p>"Attacking and defending XceptionNet from a data poisoning attack (2021)."</p>
+                    <Role id="research" when="2017 – 2021" accent="cyan" title="Research Projects">
+                        <p>
+                            "Graduate research on data poisoning attacks against facial recognition at "
+                            "the University of Missouri, and on grammars and malware analysis at "
+                            "Missouri S&T."
+                        </p>
+                        <SubSection title="Deepfake Detector Attack and Defense — 2021">
+                            <p>
+                                "Designed a label-flipping data poisoning attack on deepfake detectors, "
+                                "evaluated against XceptionNet in PyTorch, that exceeded a 99% poison "
+                                "success rate in most cases. As a defense, built a convolutional neural "
+                                "network that spots poisoned images, with a detection rate above 98% and "
+                                "precision above 99% in most cases."
+                            </p>
+                            <p><Ext href=DISSERTATION>"Dissertation"</Ext></p>
                         </SubSection>
-                        <SubSection title="Facial Authentication Attack/Defense">
-                            <p>"Attacking and defending FaceNet from a data poisoning attack (2020)."</p>
+                        <SubSection title="Facial Authentication Attack and Defense — 2020">
+                            <p>
+                                "Showed that slipping a handful of an attacker's photos into a web "
+                                "service's face enrollment, for example through a compromised home "
+                                "router, lets the attacker log in as the victim with no knowledge of "
+                                "the server. Against FaceNet on the FEI and LFW datasets, the attacker "
+                                "passed a 90% recognition rate once their photos made up half of the "
+                                "enrollment set. The attack also worked against BioID, a real face "
+                                "authentication app."
+                            </p>
+                            <p>
+                                "Built DEFEAT, a deep learning detector that flags poisoned enrollments. "
+                                "It stayed above 90% detection accuracy in every scenario tested, and "
+                                "passed 99% as injected photos neared half of the enrollment set."
+                            </p>
+                            <p>
+                                <Ext href=FACE_AUTH_PAPER>"Paper"</Ext>
+                                " · "
+                                <Ext href=FACE_AUTH_WRITEUP>"Project write-up"</Ext>
+                            </p>
                         </SubSection>
-                        <SubSection title="Grammar Induction">
+                        <SubSection title="Grammar Induction — 2019">
                             <ul>
-                                <li><Ext href="https://github.com/DaltonCole/Grammar-Malware-Analysis">"Grammar Malware Analysis"</Ext>" (2019)"</li>
-                                <li><Ext href="https://github.com/DaltonCole/research_ea">"Evolutionary Algorithm Based Grammar Induction"</Ext>" (2019)"</li>
+                                <li>
+                                    <Ext href="https://github.com/DaltonCole/Grammar-Malware-Analysis">"Grammar Malware Analysis"</Ext>
+                                    ": used the ANTLR parser generator to compare how JavaScript grammar "
+                                    "rules are used in benign code and in malware, with a Scrapy web "
+                                    "crawler gathering the benign samples."
+                                </li>
+                                <li>
+                                    <Ext href="https://github.com/DaltonCole/research_ea">"Evolutionary Algorithm Based Grammar Induction"</Ext>
+                                    ": a C++ evolutionary algorithm that generates simple context-free "
+                                    "grammars from samples of a language."
+                                </li>
                             </ul>
                         </SubSection>
                     </Role>
 
+                    <Role id="database-gta" when="Spring 2020" accent="pink" title="Database Applications GTA">
+                        <p>
+                            "Graduate teaching assistant for CMP_SC 3380, Database Applications and "
+                            "Information Systems at Mizzou — office hours, grading, and covering the "
+                            "fundamentals of database management systems, data modeling, relational "
+                            "algebra, and SQL."
+                        </p>
+                    </Role>
+
                     <Role id="teaching" when="Fall 2019" accent="violet" title="Introduction to Programming GTA">
+                        <Photo src=TEACHING_PHOTO alt="Dalton Is The Best Teaching Photo" width=320 height=895 narrow=true/>
                         <p>
                             "Graduate teaching assistant at "
                             <Ext href="https://www.mst.edu/">"Missouri University of Science & Technology"</Ext>
@@ -307,15 +393,6 @@ pub fn Experience() -> impl IntoView {
                         </p>
                     </Role>
 
-                    <Role id="database-gta" when="Spring 2020" accent="pink" title="Database Applications GTA">
-                        <p>
-                            "Graduate teaching assistant for CMP_SC 3380, Database Applications and "
-                            "Information Systems at Mizzou — office hours, grading, and covering the "
-                            "fundamentals of database management systems, data modeling, relational "
-                            "algebra, and SQL."
-                        </p>
-                    </Role>
-
                     <Role id="acm" when="2013 – 2017" accent="amber" title="Association for Computing Machinery">
                         <p>
                             <Ext href="https://www.mstacm.org/">"ACM"</Ext>
@@ -327,17 +404,6 @@ pub fn Experience() -> impl IntoView {
                             <Ext href="https://siggame.io/">"SIG-Game"</Ext>
                             " (a new game every semester, capped by the 24-hour MegaMinerAI contest)."
                         </p>
-                        <SubSection title="President — 2015–16">
-                            <p>
-                                "Found sponsors, led meetings, approved budgets in the thousands, "
-                                "equipped every sub-org (including laptops for the Cyber Defense "
-                                "team), and scheduled company tech talks. Voted the Computer Science "
-                                "Leadership Award by my peers that year."
-                            </p>
-                        </SubSection>
-                        <SubSection title="Secretary — 2014–15, 2016–17">
-                            <p>"Advertised ACM General events and took officer meeting notes."</p>
-                        </SubSection>
                         <SubSection title="SIG-Competition Chair — 2016–17">
                             <p>
                                 "Planned the local 5-hour ACM Programming Cup and gave algorithm "
@@ -351,8 +417,25 @@ pub fn Experience() -> impl IntoView {
                                 </li>
                                 <li>"First place individual at MS&T's ACM Programming Cup (Fall 2019)"</li>
                             </ul>
+                            <div class="exp-photo-pair">
+                                <Photo src=SIG_COMP_WIN_PHOTO alt="SIG-COMP First Place on Site - Webster University" width=800 height=360/>
+                                <Photo src=SIG_COMP_GROUP_PHOTO alt="SIG-COMP Group Photo" width=800 height=438/>
+                            </div>
+                        </SubSection>
+                        <SubSection title="Secretary — 2014–15, 2016–17">
+                            <p>"Advertised ACM General events and took officer meeting notes."</p>
+                        </SubSection>
+                        <SubSection title="President — 2015–16">
+                            <Photo src=LEADERSHIP_AWARD_PHOTO alt="Leadership Award" width=300 height=408 narrow=true/>
+                            <p>
+                                "Found sponsors, led meetings, approved budgets in the thousands, "
+                                "equipped every sub-org (including laptops for the Cyber Defense "
+                                "team), and scheduled company tech talks. Voted the Computer Science "
+                                "Leadership Award by my peers that year."
+                            </p>
                         </SubSection>
                         <SubSection title="SIG-Security — Member, Cyber Defense Team (M57)">
+                            <Photo src=SIG_SEC_PHOTO alt="Rare image of competing in a CTF competition with the sun up" width=800 height=450/>
                             <p>
                                 "Took part in the first four Sandia-partnered cybersecurity "
                                 "bootcamps in Albuquerque — Metasploit, "
@@ -366,6 +449,7 @@ pub fn Experience() -> impl IntoView {
                     </Role>
 
                     <Role id="asum" when="2013 – 2015" accent="violet" title="Associated Students of the University of Missouri">
+                        <Photo src=ASUM_PHOTO alt="ASUM with Claire McCaskill" width=958 height=743/>
                         <p>
                             "ASUM worked to get students more involved in politics and lobbied on "
                             "their behalf — including two trips to Washington, D.C. to talk with the "

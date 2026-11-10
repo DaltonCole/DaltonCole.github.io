@@ -6,7 +6,7 @@ use super::{
     layout::{Article, Document},
     profile::{About, Contact, Experience, Home, Resume},
 };
-use crate::islands::{ChineseRemainderSolver, MurderMysteryGame, PhaseTenScoreKeeper};
+use crate::islands::{ChineseRemainderSolver, PhaseTenScoreKeeper};
 
 pub struct Rendered {
     pub url: String,
@@ -153,24 +153,6 @@ fn not_found_page() -> AnyView {
     .into_any()
 }
 
-fn murder_mystery_document(options: LeptosOptions) -> AnyView {
-    view! {
-        <html lang="en">
-            <head>
-                <meta charset="utf-8"/>
-                <meta name="viewport" content="width=device-width, initial-scale=1"/>
-                <title>"Medieval Murder Mystery"</title>
-                <link rel="stylesheet" href="/static/murder-mystery/style.css"/>
-                <HydrationScripts options=options islands=true/>
-            </head>
-            <body>
-                <MurderMysteryGame/>
-            </body>
-        </html>
-    }
-    .into_any()
-}
-
 struct Builder<'a> {
     options: &'a LeptosOptions,
     pages: Vec<Rendered>,
@@ -181,6 +163,7 @@ impl Builder<'_> {
         &mut self,
         url: &str,
         title: &str,
+        description: &str,
         islands: bool,
         in_sitemap: bool,
         body: impl FnOnce() -> AnyView,
@@ -190,8 +173,9 @@ impl Builder<'_> {
             let body = body();
             let doc_url = url.to_string();
             let title = title.to_string();
+            let description = description.to_string();
             view! {
-                <Document title=title url=doc_url options=options islands=islands>
+                <Document title=title description=description url=doc_url options=options islands=islands>
                     {body}
                 </Document>
             }
@@ -204,12 +188,18 @@ impl Builder<'_> {
         });
     }
 
-    fn listed(&mut self, url: &str, title: &str, body: impl FnOnce() -> AnyView) {
-        self.add(url, title, false, true, body);
+    fn listed(
+        &mut self,
+        url: &str,
+        title: &str,
+        description: &str,
+        body: impl FnOnce() -> AnyView,
+    ) {
+        self.add(url, title, description, false, true, body);
     }
 
-    fn tool(&mut self, url: &str, title: &str, body: impl FnOnce() -> AnyView) {
-        self.add(url, title, true, true, body);
+    fn tool(&mut self, url: &str, title: &str, description: &str, body: impl FnOnce() -> AnyView) {
+        self.add(url, title, description, true, true, body);
     }
 }
 
@@ -219,32 +209,62 @@ pub fn render_all(options: &LeptosOptions) -> Vec<Rendered> {
         pages: Vec::new(),
     };
 
-    site.listed("", "Home", || view! { <Home/> }.into_any());
-    site.listed("about", "About", || view! { <About/> }.into_any());
-    site.listed("work-experience", "Experience", || {
-        view! { <Experience/> }.into_any()
-    });
-    site.listed("resume", "Résumé", || view! { <Resume/> }.into_any());
-    site.listed("contact", "Contact", || view! { <Contact/> }.into_any());
-    site.listed("projects", "Projects", projects_index);
+    site.listed(
+        "",
+        "Home",
+        "Dalton Cole is a Senior Computer Scientist at Sandia National Laboratories working on machine learning and remote sensing.",
+        || view! { <Home/> }.into_any(),
+    );
+    site.listed(
+        "about",
+        "About",
+        "Dalton Russell Cole's background and career timeline, from high school to Sandia National Laboratories.",
+        || view! { <About/> }.into_any(),
+    );
+    site.listed(
+        "work-experience",
+        "Experience",
+        "Dalton Cole's work at Sandia National Laboratories, publications, research on data poisoning attacks, teaching, and leadership.",
+        || view! { <Experience/> }.into_any(),
+    );
+    site.listed(
+        "resume",
+        "Résumé",
+        "The résumé of Dalton Cole, a Senior Computer Scientist with a Ph.D. in Computer Science.",
+        || view! { <Resume/> }.into_any(),
+    );
+    site.listed(
+        "contact",
+        "Contact",
+        "How to reach Dalton Cole by email, GitHub, or LinkedIn.",
+        || view! { <Contact/> }.into_any(),
+    );
+    site.listed(
+        "projects",
+        "Projects",
+        "Small tools by Dalton Cole that run entirely in your browser, written in Rust and compiled to WebAssembly.",
+        projects_index,
+    );
     site.tool(
         "projects/chinese-remainder-theorem",
         "Chinese Remainder Theorem",
+        "Solve a system of congruences as you type, with each step of the Chinese remainder theorem shown.",
         crt_page,
     );
     site.tool(
         "projects/phase-10-score-keeper",
         "Phase 10 Score Keeper",
+        "Keep score for a game of Phase 10 from a phone or laptop, with each player's phase and running total.",
         phase_ten_page,
     );
-    site.add("404", "Page Not Found", false, false, not_found_page);
-
-    let game = to_document(|| murder_mystery_document(options.clone()));
-    site.pages.push(Rendered {
-        url: "murder-mystery".to_string(),
-        html: game,
-        in_sitemap: false,
-    });
+    site.add(
+        "404",
+        "Page Not Found",
+        "That page doesn't exist, or it's no longer part of this site.",
+        false,
+        false,
+        not_found_page,
+    );
 
     site.pages
 }

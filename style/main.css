@@ -1,4 +1,49 @@
 /* ---------------------------------------------------------------- */
+/* Fonts                                                              */
+/* ---------------------------------------------------------------- */
+@font-face {
+  font-family: "Space Grotesk";
+  font-weight: 500;
+  font-display: swap;
+  src: url("/static/fonts/space-grotesk-latin-500-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Space Grotesk";
+  font-weight: 600;
+  font-display: swap;
+  src: url("/static/fonts/space-grotesk-latin-600-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Space Grotesk";
+  font-weight: 700;
+  font-display: swap;
+  src: url("/static/fonts/space-grotesk-latin-700-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-weight: 400;
+  font-display: swap;
+  src: url("/static/fonts/inter-latin-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-weight: 500;
+  font-display: swap;
+  src: url("/static/fonts/inter-latin-500-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-weight: 600;
+  font-display: swap;
+  src: url("/static/fonts/inter-latin-600-normal.woff2") format("woff2");
+}
+
+/* ---------------------------------------------------------------- */
 /* Design tokens                                                     */
 /* ---------------------------------------------------------------- */
 :root {
@@ -8,7 +53,7 @@
   --border: rgba(255, 255, 255, 0.09);
   --text: #f4f4f8;
   --text-muted: #9797ac;
-  --text-faint: #5f5f72;
+  --text-faint: #85859a;
 
   --violet: #8b5cf6;
   --violet-soft: rgba(139, 92, 246, 0.14);
@@ -301,7 +346,7 @@ section:last-child { border-bottom: none; }
   font-weight: 700;
   margin-bottom: 18px;
   background: var(--card-accent-soft, var(--violet-soft));
-  color: var(--card-accent, var(--violet));
+  color: var(--text);
 }
 
 .card h3 { margin-bottom: 8px; }
@@ -407,7 +452,9 @@ section:last-child { border-bottom: none; }
   border-left-color: var(--text-faint);
 }
 
+/* flow-root keeps a floated photo inside the section it belongs to. */
 .exp-section {
+  display: flow-root;
   padding: 0 0 56px;
   scroll-margin-top: 96px;
 }
@@ -423,6 +470,7 @@ section:last-child { border-bottom: none; }
 }
 
 .exp-sub {
+  display: flow-root;
   margin-top: 28px;
   padding-top: 20px;
   border-top: 1px solid var(--border);
@@ -434,6 +482,30 @@ section:last-child { border-bottom: none; }
   margin-bottom: 6px;
 }
 
+.exp-photo {
+  float: right;
+  width: 240px;
+  height: auto;
+  margin: 4px 0 16px 24px;
+  border-radius: var(--radius-sm);
+}
+
+.exp-photo-narrow { width: 160px; }
+
+.exp-photo-pair {
+  display: grid;
+  /* Columns in proportion to each photo's shape, so the two come out the same height. */
+  grid-template-columns: 2.222fr 1.826fr;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.exp-photo-pair .exp-photo {
+  float: none;
+  width: 100%;
+  margin: 0;
+}
+
 @media (max-width: 800px) {
   .experience-layout { grid-template-columns: 1fr; }
   .experience-side-nav {
@@ -442,6 +514,22 @@ section:last-child { border-bottom: none; }
     flex-wrap: wrap;
     top: auto;
   }
+}
+
+@media (max-width: 640px) {
+  .exp-photo {
+    float: none;
+    width: 100%;
+    margin: 12px 0 16px;
+  }
+
+  .exp-photo-narrow {
+    width: 160px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .exp-photo-pair { grid-template-columns: 1fr; }
 }
 
 /* ---------------------------------------------------------------- */
